@@ -90,7 +90,7 @@ export const equipment: Equipment[] = [
     images: img(6),
     specs: { Длина: "244 см", Нагрузка: "70 кг", Комплект: "весло, насос" },
     rules: ["Только под присмотром взрослых"],
-    stock: 2,
+    stock: 0,
   },
   {
     id: "backpack-trek-60",
