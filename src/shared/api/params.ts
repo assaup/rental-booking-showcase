@@ -12,7 +12,6 @@ export const CatalogParamsSchema = z.object({
   to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   priceMin: z.coerce.number().min(0).optional(),
   priceMax: z.coerce.number().min(0).optional(),
-  fail: z.enum(["1"]).optional(), // костыль - потом убрать
 });
 
 export type CatalogParams = z.infer<typeof CatalogParamsSchema>;

@@ -1,0 +1,69 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+.link {
+  display: block;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-forest);
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.body {
+  padding: var(--space-4);
+}
+
+.category {
+  margin-bottom: var(--space-1);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin-bottom: var(--space-2);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.specs {
+  margin-bottom: var(--space-3);
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.deposit {
+  color: var(--color-muted);
+  font-size: 12px;
+}

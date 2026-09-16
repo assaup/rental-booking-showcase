@@ -1,0 +1,98 @@
+.header {
+  background: var(--color-forest);
+  color: #fff;
+}
+
+.inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.logoMark {
+  color: var(--color-accent);
+  font-size: 16px;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-5);
+  font-size: 14px;
+}
+
+.navLink {
+  color: rgba(255, 255, 255, 0.72);
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #fff;
+  }
+  
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dates {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--color-accent-hover);
+  }
+}
+
+.cartCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.22);
+  font-size: 11px;
+  line-height: 1;
+}
