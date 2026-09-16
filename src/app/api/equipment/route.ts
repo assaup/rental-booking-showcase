@@ -53,6 +53,11 @@ export async function GET(request: Request) {
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const start = (page - 1) * limit
   result = result.slice(start, start + limit)
+  if (searchParams.get("fail") === "1") {
+    return NextResponse.json({ message: "Временный сбой" }, { status: 503 });
+  }
+
+  await new Promise((resolve) => setTimeout(resolve , 1500))
 
   return NextResponse.json({
     items: result,

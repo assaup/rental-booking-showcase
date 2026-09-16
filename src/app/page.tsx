@@ -7,6 +7,8 @@ import {
 import { CatalogFilters } from "./_components/CatalogFilters";
 import { CatalogPagination } from "./_components/CatalogPagination";
 import Link from "next/link";
+import { Recommendations } from "./_components/Recommendations";
+import { SafeBlock } from "./_components/SafeBlock";
 
 export default async function Home({
   searchParams,
@@ -34,18 +36,30 @@ export default async function Home({
       <CatalogFilters />
       <p>Всего позиций: {data.total}</p>
 
-      <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            <h2>{item.name}</h2>
-          <Link href={`/equipment/${item.id}`}>{item.name}</Link>
+      {items.length === 0 ? (
+        <div>
+          <p>По вашим фильтрам ничего не нашлось</p>
+          <Link href="/">Сбросить фильтры</Link>
+        </div>
+      ) : (
+        <ul>
+          {items.map((item) => (
+            <li key={item.id}>
+              <h2>{item.name}</h2>
+              <Link href={`/equipment/${item.id}`}>{item.name}</Link>
 
-            <p>{item.pricePerDay} ₽ / день</p>
-            <p>Залог: {item.deposit} ₽</p>
-          </li>
-        ))}
-      </ul>
-
+              <p>{item.pricePerDay} ₽ / день</p>
+              <p>Залог: {item.deposit} ₽</p>
+            </li>
+          ))}
+        </ul>
+      )}
+      <SafeBlock
+        loading={<p>Загружаем рекомендации…</p>}
+        fallback={<p>Рекомендации временно недоступны</p>}
+      >
+        <Recommendations />
+      </SafeBlock>
       <CatalogPagination
         page={data.page}
         totalPages={data.totalPages}
