@@ -21,3 +21,15 @@ export async function getEquipmentList(
     }
   return res.json()
 }
+
+export async function getEquipmentById(id: string): Promise<Equipment | null> {
+  const res = await fetch(`${BASE_URL}/api/equipment/${id}`, { cache: "no-store" });
+
+  if (res.status === 404) return null
+
+  if (!res.ok){
+    throw new Error(`Ошибка API: ${res.status}`)
+  }
+
+  return res.json()
+}
