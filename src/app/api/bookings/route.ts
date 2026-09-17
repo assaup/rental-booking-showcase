@@ -1,4 +1,5 @@
 import { validateDates } from "@/app/shared/cart/model";
+import { equipment } from "@/server/mock/equipment";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -35,6 +36,34 @@ export async function POST(request: Request) {
         { status: 400 }
     )
   }
+
+  const conflicts: { id: string; requested: number; available: number }[] = [];
+  for (const requestedItem of parsed.data.items) {
+    const found = equipment.find((item) => item.id === requestedItem.id)
+
+    if (!found) {
+      conflicts.push({id: requestedItem.id, requested: requestedItem.qty, available: 0})
+      continue
+    }
+    if (found.stock < requestedItem.qty) {
+      conflicts.push({
+        id: requestedItem.id,
+        requested: requestedItem.qty,
+        available: found.stock
+      })
+    }
+
+    // TODO: найти позицию в equipment по id
+    // TODO: если не нашлась — доступно 0
+    // TODO: если stock меньше запрошенного — добавить в conflicts
+  }
+  if (conflicts.length > 0){
+    return NextResponse.json(
+      { message: "Некоторые позиции недоступны на выбранные даты", conflicts },
+      { status: 409 }
+    )
+  }
+  
 
   return NextResponse.json({ bookingNumber: "NR-0001" }, { status: 201 })
 
