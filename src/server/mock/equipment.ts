@@ -1,12 +1,4 @@
-export type Category = "tents" | "sup" | "backpacks" | "sleeping" | "stoves";
-
-export const CATEGORIES: { value: Category; label: string }[] = [
-  { value: "tents", label: "Палатки" },
-  { value: "sup", label: "Сапборды" },
-  { value: "backpacks", label: "Рюкзаки" },
-  { value: "sleeping", label: "Спальники" },
-  { value: "stoves", label: "Горелки" },
-];
+import { type Category } from "@/app/shared/labels";
 
 export interface Equipment {
   id: string;

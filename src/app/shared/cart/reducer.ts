@@ -6,6 +6,7 @@ export type CartAction =
   | { type: "setQty"; id: string; qty: number }
   | { type: "setDates"; from: string | null; to: string | null }
   | { type: "clear" }
+  | { type: 'toggleExtra'; id: string}
 
 export function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
@@ -55,6 +56,15 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         ...state,
         items: [],
       };
+    case 'toggleExtra': {
+      const selected = state.extras.includes(action.id)
+      return {
+        ...state,
+        extras: selected
+            ? state.extras.filter((id) => id !== action.id)
+            : [ ...state.extras, action.id]
+      }
+    }
 
     default:
       return state;

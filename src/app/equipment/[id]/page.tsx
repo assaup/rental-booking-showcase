@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getEquipmentById } from "@/shared/api/equipment";
 import Link from "next/link";
-import { Button } from "@/app/_components/Button/Button";
 import { AddToCartButton } from "@/app/_components/AddToCartButton/AddToCartButton";
 
 export default async function EquipmentPage({
@@ -54,6 +53,7 @@ export default async function EquipmentPage({
         deposit={item.deposit}
         name={item.name}
         pricePerDay={item.pricePerDay}
+        category={item.category}
       />
     </main>
   );

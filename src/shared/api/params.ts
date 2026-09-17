@@ -1,9 +1,10 @@
+import { CategorySchema } from "@/app/shared/labels";
 import { z } from "zod";
 export type RawSearchParams = {
   [key: string]: string | string[] | undefined;
 };
 export const CatalogParamsSchema = z.object({
-  category: z.enum(["tents", "sup", "backpacks", "sleeping", "stoves"]).optional(),
+  category: CategorySchema.optional(),
   sort: z.enum(["name_asc", "price_asc", "price_desc"]).default("name_asc"),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(12),

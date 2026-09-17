@@ -28,36 +28,35 @@ export async function GET(request: Request) {
   }
 
   result = result.filter(
-    (item) => item.pricePerDay >= priceMin && item.pricePerDay <= priceMax
-  )
+    (item) => item.pricePerDay >= priceMin && item.pricePerDay <= priceMax,
+  );
 
-  if (onlyAvailable){
-    result = result.filter((item) => item.stock > 0)
+  if (onlyAvailable) {
+    result = result.filter((item) => item.stock > 0);
   }
   // 2. Сортировка
-  switch(sort) {
-            case 'price_asc':
-                result = [...result].sort((a, b) => a.pricePerDay - b.pricePerDay)
-                break
-            case 'price_desc':
-                result = [...result].sort((a, b) => b.pricePerDay - a.pricePerDay)
-                break
-            case 'name_asc':
-                result = [...result].sort((a, b) => a.name.localeCompare(b.name))
-                break
-            
-        }
+  switch (sort) {
+    case "price_asc":
+      result = [...result].sort((a, b) => a.pricePerDay - b.pricePerDay);
+      break;
+    case "price_desc":
+      result = [...result].sort((a, b) => b.pricePerDay - a.pricePerDay);
+      break;
+    case "name_asc":
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+      break;
+  }
 
   // 3. Пагинация
   const total = result.length;
   const totalPages = Math.max(1, Math.ceil(total / limit));
-  const start = (page - 1) * limit
-  result = result.slice(start, start + limit)
+  const start = (page - 1) * limit;
+  result = result.slice(start, start + limit);
   if (searchParams.get("fail") === "1") {
     return NextResponse.json({ message: "Временный сбой" }, { status: 503 });
   }
 
-  await new Promise((resolve) => setTimeout(resolve , 700))
+  await new Promise((resolve) => setTimeout(resolve, 700));
 
   return NextResponse.json({
     items: result,

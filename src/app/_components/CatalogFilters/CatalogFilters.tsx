@@ -1,5 +1,5 @@
 "use client";
-import { CATEGORIES } from "@/server/mock/equipment";
+import { CATEGORIES } from './../../shared/labels';
 import styles from './CatalogFilters.module.scss'
 import { useCatalogParams } from "@/app/shared/hooks/useCatalogParams";
 

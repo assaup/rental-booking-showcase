@@ -2,15 +2,11 @@
 import Link from "next/link";
 import styles from "./Header.module.scss";
 import { useCart } from "@/app/shared/cart/CartProvider";
-import { useEffect, useState } from "react";
+import { useMounted } from "@/app/shared/hooks/useMounted";
 
 export function Header() {
-  const [mounted, setMounted] = useState();
+  const mounted = useMounted();
   const { state } = useCart();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const totalQty = state.items.reduce((sum, item) => sum + item.qty, 0);
 

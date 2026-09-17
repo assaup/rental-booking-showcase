@@ -10,7 +10,7 @@ import {
 import { cartReducer, type CartAction } from "./reducer";
 import { calculateTotals, CartStateSchema, type CartState, type CartTotals } from "./model";
 
-const INITIAL: CartState = { items: [], from: null, to: null };
+const INITIAL: CartState = { items: [], from: null, to: null, extras: []};
 
 interface CartContextValue {
   state: CartState;
