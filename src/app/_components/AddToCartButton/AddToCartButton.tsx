@@ -3,6 +3,7 @@
 import { useCart } from "@/app/shared/cart/CartProvider";
 import styles from "./AddToCartButton.module.scss";
 import { Category } from "@/app/shared/labels";
+import { useMounted } from "@/app/shared/hooks/useMounted";
 
 interface Props {
   id: string;
@@ -12,15 +13,32 @@ interface Props {
   category: Category;
 }
 
-export function AddToCartButton({ id, deposit, name, pricePerDay, category }: Props) {
-  const { dispatch } = useCart();
+export function AddToCartButton({ id, name, pricePerDay, deposit, category }: Props) {
+  const { state, dispatch } = useCart();
+  const mounted = useMounted  ();
+
+  const inCart = state.items.find((item) => item.id === id);
+
   function handleAdd() {
     dispatch({ type: "add", item: { id, name, pricePerDay, deposit, category } });
   }
 
+  if (mounted && inCart) {
+    return (
+      <button
+        onClick={handleAdd}
+        className={`${styles.button} ${styles.added}`}
+      >
+        <span className={styles.icon}>✓</span>
+        В корзине · {inCart.qty} шт · добавить ещё
+      </button>
+    );
+  }
+
   return (
-    <button onClick={handleAdd} className={`${styles.button}`}>
-      В корзину
+    <button onClick={handleAdd} className={styles.button}>
+      <span className={styles.icon}>🛒</span>
+      Добавить в корзину
     </button>
   );
 }

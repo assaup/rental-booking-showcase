@@ -1,0 +1,41 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-pine);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.08s ease;
+
+  &:hover {
+    background: #2e5643;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.added {
+  border: 1px solid var(--color-border);
+
+  &:hover {
+    background: #2e5643;
+  }
+}
+
+.icon {
+  font-size: 15px;
+  line-height: 1;
+}

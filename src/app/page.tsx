@@ -5,9 +5,9 @@ import {
   type RawSearchParams,
 } from "@/shared/api/params";
 import { CatalogFilters } from "./_components/CatalogFilters/CatalogFilters";
-import { CatalogPagination } from "./_components/CatalogPagination";
+import { CatalogPagination } from "./_components/CatalogPagination/CatalogPagination";
 import Link from "next/link";
-import { Recommendations } from "./_components/Recommendations";
+import { Recommendations } from "./_components/Recommendations/Recommendations";
 import { SafeBlock } from "./_components/SafeBlock";
 import { EquipmentCard } from "./_components/EquipmentCard/EquipmentCard";
 import styles from "./page.module.scss";
@@ -66,12 +66,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<Raw
             ))}
           </ul>
         )}
-        <SafeBlock
-          loading={<p>Загружаем рекомендации…</p>}
-          fallback={<p>Рекомендации временно недоступны</p>}
-        >
-          <Recommendations />
-        </SafeBlock>
         <CatalogPagination
           page={data.page}
           totalPages={data.totalPages}
