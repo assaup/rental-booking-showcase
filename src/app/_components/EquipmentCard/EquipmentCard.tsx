@@ -32,6 +32,13 @@ export function EquipmentCard({ item }: { item: Equipment }) {
           <p className={styles.deposit}>залог {item.deposit} ₽</p>
         </div>
       </Link>
+      <span className={styles.badge}>
+        <span
+          className={`${styles.badgeDot} ${item.stock <= 2 ? styles.badgeDotLow : ""}`}
+        />
+        {item.stock > 2 ? "Доступно" : `Осталось ${item.stock}`}
+      </span>
+      <span className={styles.arrow}>↗</span>
     </li>
   );
 }

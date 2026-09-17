@@ -1,0 +1,81 @@
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hint {
+  margin-top: 2px;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.sortWrap {
+  flex-shrink: 0;
+}
+
+.sortLabel {
+  margin-bottom: 5px;
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sort {
+  min-width: 190px;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-pine);
+  }
+}
+
+/* чипы активных фильтров */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 12px;
+  color: var(--color-text);
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-pine);
+    background: #fff;
+  }
+}
+
+.chipRemove {
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1;
+}

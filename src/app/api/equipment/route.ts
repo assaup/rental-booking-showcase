@@ -57,7 +57,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ message: "Временный сбой" }, { status: 503 });
   }
 
-  await new Promise((resolve) => setTimeout(resolve , 1500))
+  await new Promise((resolve) => setTimeout(resolve , 700))
 
   return NextResponse.json({
     items: result,

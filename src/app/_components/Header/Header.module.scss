@@ -1,5 +1,5 @@
 .header {
-  background: var(--color-forest);
+  background: var(--color-pine);
   color: #fff;
 }
 
@@ -41,7 +41,7 @@
   &:hover {
     color: #fff;
   }
-  
+
 }
 
 .actions {
@@ -91,7 +91,7 @@
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  border-radius: 50%;
+  border-radius: 999px;
   background: rgba(0, 0, 0, 0.22);
   font-size: 11px;
   line-height: 1;

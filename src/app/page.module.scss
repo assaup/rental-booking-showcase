@@ -1,9 +1,76 @@
-.layout {
+.page {
   max-width: var(--container);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-5);
+  padding: var(--space-6) var(--space-5) var(--space-7);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.heroText {
+  max-width: 560px;
+}
+.header{
+  font-size: 42px;
+}
+
+.eyebrow {
+  margin-bottom: var(--space-3);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-bottom: var(--space-3);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+.period {
+  flex-shrink: 0;
+  min-width: 300px;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.periodLabel {
+  margin-bottom: var(--space-2);
+  color: var(--color-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.periodValue {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ---------- сетка ---------- */
+
+.layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 264px 1fr;
   gap: var(--space-5);
   align-items: start;
 }
@@ -13,24 +80,111 @@
   top: var(--space-5);
 }
 
+.content {
+  min-width: 0;
+}
+
+.contentHead {
+  margin-bottom: var(--space-4);
+  font-size: 24px;
+  font-weight: 700;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
 }
 
-@media (max-width: 900px) {
+/* ---------- плашка notices ---------- */
+
+.notices {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: #fdf4e3;
+  border: 1px solid #f0dfbc;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+}
+
+.noticesTitle {
+  margin-bottom: var(--space-1);
+  font-weight: 600;
+}
+
+.noticesList li {
+  color: var(--color-muted);
+}
+
+/* ---------- пустая выдача ---------- */
+
+.empty {
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.emptyTitle {
+  margin-bottom: var(--space-2);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.emptyReset {
+  display: inline-block;
+  margin-top: var(--space-3);
+  color: var(--color-accent);
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ---------- рекомендации ---------- */
+
+.recommendations {
+  margin-top: var(--space-6);
+}
+
+.pagination {
+  margin-top: var(--space-6);
+}
+
+/* ---------- адаптив ---------- */
+
+@media (max-width: 960px) {
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
   }
 
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .hero {
+    flex-direction: column;
+  }
+
+  .period {
+    width: 100%;
+  }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 30px;
   }
 }

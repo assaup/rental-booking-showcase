@@ -1,16 +1,19 @@
 :root {
-  /* палитра */
-  --color-bg: #f4f0e6;
-  --color-surface: #ffffff;
-  --color-forest: #1c3029;
-  --color-forest-soft: #2a4034;
-  --color-accent: #d97a34;
-  --color-accent-hover: #c26a28;
-  --color-text: #1a1a1a;
+  /* палитра из UI Kit */
+  --color-pine: #254838;      /* шапка, тёмные блоки, кнопка "В корзину" */
+  --color-charcoal: #20251f;  /* основной текст */
+  --color-amber: #d8732d;     /* акцент, главные кнопки */
+  --color-sand: #e8ddc9;      /* скелетоны, мягкие блоки */
+  --color-canvas: #f5f1e8;    /* фон страницы */
+  --color-surface: #fffdf6;   /* карточки */
+
+  /* семантические псевдонимы — ими и пользуйся в компонентах */
+  --color-bg: var(--color-canvas);
+  --color-text: var(--color-charcoal);
+  --color-accent: var(--color-amber);
   --color-muted: #7a7469;
   --color-border: #e3ddd0;
-  --color-warning-bg: #fdf4e3;
-  --color-success: #4ca771;
+  --color-accent-hover: #c2661f;
 
   /* скругления */
   --radius-sm: 6px;

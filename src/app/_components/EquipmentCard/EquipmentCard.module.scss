@@ -1,13 +1,14 @@
 .card {
+  position: relative;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(32, 37, 31, 0.1);
+    transform: translateY(-3px);
   }
 }
 
@@ -17,20 +18,34 @@
 
 .photo {
   position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--color-forest);
+  aspect-ratio: 3 / 2;
+  background: linear-gradient(160deg, #2c3b33, #171d18);
 }
 
 .badge {
   position: absolute;
   top: var(--space-3);
   left: var(--space-3);
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
+  background: var(--color-canvas);
+  color: var(--color-charcoal);
   font-size: 11px;
   font-weight: 600;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3f8f5f;
+}
+
+.badgeDotLow {
+  background: var(--color-accent);
 }
 
 .body {
@@ -38,32 +53,48 @@
 }
 
 .category {
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
   color: var(--color-accent);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .name {
   margin-bottom: var(--space-2);
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .specs {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
   color: var(--color-muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .price {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .deposit {
+  margin-top: 2px;
   color: var(--color-muted);
-  font-size: 12px;
+  font-size: 11px;
+}
+
+.arrow {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  color: var(--color-muted);
+  font-size: 15px;
+  transition: color 0.15s ease, transform 0.15s ease;
+
+  .card:hover & {
+    color: var(--color-charcoal);
+    transform: translate(2px, -2px);
+  }
 }
