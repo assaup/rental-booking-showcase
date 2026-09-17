@@ -53,7 +53,7 @@ export function CatalogFilters() {
         <div className={styles.prices}>
           <input
             type="number"
-            key={searchParams.get('priceMin') ?? ''}
+            key={`priceMin-${searchParams.get('priceMin') ?? ''}`}
             className={styles.priceInput}
             placeholder="от 300 ₽"
             defaultValue={searchParams.get("priceMin") ?? ""}
@@ -61,7 +61,7 @@ export function CatalogFilters() {
           />
           <input
             type="number"
-            key={searchParams.get('priceMax') ?? ''}
+            key={`priceMax-${searchParams.get('priceMax') ?? ''}`}
             className={styles.priceInput}
             placeholder="до 2 500 ₽"
             defaultValue={searchParams.get("priceMax") ?? ""}

@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getEquipmentById } from "@/shared/api/equipment";
 import Link from "next/link";
+import { Button } from "@/app/_components/Button/Button";
+import { AddToCartButton } from "@/app/_components/AddToCartButton/AddToCartButton";
 
 export default async function EquipmentPage({
   params,
@@ -47,6 +49,12 @@ export default async function EquipmentPage({
         ))}
       </ul>
       <Link href="/">Назад в каталог</Link>
+      <AddToCartButton
+        id={id}
+        deposit={item.deposit}
+        name={item.name}
+        pricePerDay={item.pricePerDay}
+      />
     </main>
   );
 }
