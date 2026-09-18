@@ -434,6 +434,21 @@
   font-weight: 600;
 }
 
+.inputError {
+  border-color: #c0553c;
+
+  &:focus {
+    border-color: #c0553c;
+  }
+}
+
+.fieldError {
+  display: block;
+  margin-top: 5px;
+  color: #c0553c;
+  font-size: 12px;
+}
+
 /* ---------- адаптив ---------- */
 
 @media (max-width: 960px) {

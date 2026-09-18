@@ -1,18 +1,62 @@
 "use client";
-
+import {
+  Contacts,
+  ContactsSchema,
+  EXTRAS,
+  validateDates,
+} from "../shared/cart/model";
+import { categoryLabel } from "../shared/labels";
+import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "../shared/cart/CartProvider";
 import { useMounted } from "../shared/hooks/useMounted";
 import styles from "./page.module.scss";
-import { EXTRAS, validateDates } from "../shared/cart/model";
-import { categoryLabel } from "../shared/labels";
+import { Conflict, createBooking } from "@/shared/api/booking";
+import {
+  clearIdempotencyKey,
+  getIdempotencyKey,
+} from "../shared/cart/idempotency";
+import { ApiError } from "@/shared/api/error";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const [contacts, setContacts] = useState<Contacts>({ name: "", phone: "" });
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const { state, totals, dispatch } = useCart();
-  const mounted = useMounted();
+  const [submitting, setSubmitting] = useState(false);
+  const [bookingNumber, setBookingNumber] = useState<string | null>(null);
+  const [error, setError] = useState<{
+    message: string;
+    conflicts?: Conflict[];
+  } | null>(null);
 
+  const router = useRouter();
+  const mounted = useMounted();
   if (!mounted) return null;
 
+  if (bookingNumber) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.success}>
+          <div className={styles.successIcon}>✓</div>
+          <h1 className={styles.successTitle}>Бронирование подтверждено</h1>
+          <p className={styles.successNumber}>{bookingNumber}</p>
+          <p className={styles.successText}>
+            Мы сохранили заказ — он уже в истории броней. Заберите снаряжение на
+            ул. Лесной, 18 и возьмите паспорт.
+          </p>
+          <div className={styles.successActions}>
+            <Link href="/history" className={styles.successPrimary}>
+              История броней
+            </Link>
+            <Link href="/" className={styles.successSecondary}>
+              В каталог
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
   if (state.items.length === 0) {
     return (
       <main className={styles.page}>
@@ -29,9 +73,72 @@ export default function CartPage() {
     );
   }
 
-  const today = new Date().toISOString().slice(0, 10)
+  const today = new Date().toISOString().slice(0, 10);
   const dateError = validateDates(state.from, state.to);
 
+  const contactsResult = ContactsSchema.safeParse(contacts);
+
+  function errorFor(field: keyof Contacts): string | null {
+    if (!touched[field]) return null;
+    if (contactsResult.success) return null;
+
+    const issue = contactsResult.error.issues.find((i) => i.path[0] === field);
+    return issue?.message ?? null;
+  }
+  const canSubmit =
+    contactsResult.success && dateError === null && state.items.length > 0;
+
+  async function handleSubmit() {
+    if (!state.from || !state.to) return;
+    setSubmitting(true);
+    setError(null);
+    const payload = {
+      items: state.items.map((item) => ({ id: item.id, qty: item.qty })),
+      from: state.from,
+      to: state.to,
+      extras: state.extras,
+      contacts,
+    };
+    const key = getIdempotencyKey(state);
+    try {
+      const booking = await createBooking(payload, key);
+      if (booking) {
+        setBookingNumber(booking.bookingNumber);
+        dispatch({ type: "clear" });
+        clearIdempotencyKey();
+      }
+    } catch (err) {
+      if (err instanceof ApiError) {
+        switch (err.status) {
+          case 409: {
+            const data = err.data as { conflicts?: Conflict[] };
+            setError({ message: err.message, conflicts: data.conflicts });
+            break;
+          }
+          case 401:
+            router.push("/login");
+            break;
+          default:
+            setError({ message: err.message });
+        }
+      } else {
+        setError({
+          message: "Нет соединения. Проверьте сеть и повторите действие.",
+        });
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function handleRecalculate() {
+    if (!error?.conflicts) return;
+
+    for (const conflict of error.conflicts) {
+      dispatch({ type: "setQty", id: conflict.id, qty: conflict.available });
+    }
+    setError(null);
+  }
   return (
     <main className={styles.page}>
       <header className={styles.head}>
@@ -43,7 +150,6 @@ export default function CartPage() {
       </header>
 
       <div className={styles.layout}>
-        {/* ---------- левая колонка ---------- */}
         <div className={styles.main}>
           <section className={styles.period}>
             <div>
@@ -58,7 +164,7 @@ export default function CartPage() {
                 type="date"
                 className={styles.dateInput}
                 min={today}
-                max={state.from ?? undefined}
+                max={state.to ?? undefined}
                 value={state.from ?? ""}
                 onChange={(e) =>
                   dispatch({
@@ -84,16 +190,24 @@ export default function CartPage() {
               />
             </div>
             {dateError && <p className={styles.error}>{dateError.message}</p>}
-            
           </section>
 
           <ul className={styles.items}>
             {state.items.map((item) => (
-              <li key={item.id} className={styles.item}>
+              <li
+                key={item.id}
+                className={`${styles.item} ${
+                  error?.conflicts?.some((c) => c.id === item.id)
+                    ? styles.itemConflict
+                    : ""
+                }`}
+              >
                 <div className={styles.itemPhoto} />
 
                 <div className={styles.itemInfo}>
-                  <p className={styles.itemCategory}>{categoryLabel(item.category)}</p>
+                  <p className={styles.itemCategory}>
+                    {categoryLabel(item.category)}
+                  </p>
                   <p className={styles.itemName}>{item.name}</p>
                   <p className={styles.itemMeta}>
                     {item.pricePerDay} ₽ × {totals.days} дня
@@ -148,7 +262,6 @@ export default function CartPage() {
             ))}
           </ul>
 
-          {/* доп. услуги — логику пишешь сам */}
           <section className={styles.extras}>
             <p className={styles.extrasTitle}>Дополнительно</p>
             {EXTRAS.map((extra) => (
@@ -170,7 +283,6 @@ export default function CartPage() {
           </section>
         </div>
 
-        {/* ---------- правая колонка ---------- */}
         <aside className={styles.side}>
           <div className={styles.authNote}>Вы вошли как alexey@mail.ru</div>
 
@@ -181,17 +293,30 @@ export default function CartPage() {
               <span className={styles.fieldLabel}>Имя</span>
               <input
                 type="text"
-                className={styles.input}
+                className={`${styles.input} ${errorFor("name") ? styles.inputError : ""}`}
                 placeholder="Как к вам обращаться"
+                value={contacts.name}
+                onChange={(e) =>
+                  setContacts({ ...contacts, name: e.target.value })
+                }
+                onBlur={() => setTouched({ ...touched, name: true })}
               />
+              {errorFor("name") && (
+                <span className={styles.fieldError}>{errorFor("name")}</span>
+              )}
             </label>
 
             <label className={styles.field}>
               <span className={styles.fieldLabel}>Телефон</span>
               <input
                 type="tel"
-                className={styles.input}
+                className={`${styles.input} ${errorFor("phone") ? styles.inputError : ""}`}
                 placeholder="+7 900 000-00-00"
+                value={contacts.phone}
+                onChange={(e) =>
+                  setContacts({ ...contacts, phone: e.target.value })
+                }
+                onBlur={() => setTouched({ ...touched, phone: true })}
               />
             </label>
           </section>
@@ -219,9 +344,44 @@ export default function CartPage() {
               <span className={styles.grandValue}>{totals.total} ₽</span>
             </div>
 
-            <button disabled={dateError !== null} type="button" className={styles.submit}>
-              Подтвердить бронирование
+            <button
+              type="button"
+              className={styles.submit}
+              onClick={handleSubmit}
+              disabled={!canSubmit || submitting}
+            >
+              {submitting ? "Отправляем…" : "Подтвердить бронирование"}
             </button>
+            {error && (
+              <div className={styles.errorBox} role="alert">
+                <p className={styles.errorTitle}>{error.message}</p>
+
+                {error.conflicts && (
+                  <>
+                    <ul className={styles.conflictList}>
+                      {error.conflicts.map((conflict) => {
+                        const item = state.items.find(
+                          (i) => i.id === conflict.id,
+                        );
+                        return (
+                          <li key={conflict.id} className={styles.conflictItem}>
+                            <span>{item?.name ?? conflict.id}</span>
+                            <span className={styles.conflictQty}>
+                              просите {conflict.requested}, доступно{" "}
+                              {conflict.available}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+
+                    <button type="button" className={styles.recalc} onClick={handleRecalculate}>
+                      Пересчитать заказ
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
 
             <p className={styles.submitHint}>
               Повторное нажатие не создаст дубликат заказа.

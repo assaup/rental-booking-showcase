@@ -86,3 +86,12 @@ export function validateDates(
   if (days > MAX_DAYS) return {field: 'from', message: `Максимальный срок аренды — ${MAX_DAYS} дней`}
   return null
 }
+
+export const ContactsSchema = z.object({
+  name: z.string().min(2, "Укажите имя полностью"),
+  phone: z
+    .string()
+    .regex(/^\+?[0-9\s\-()]{10,18}$/, "Телефон в формате +7 900 000-00-00"),
+});
+
+export type Contacts = z.infer<typeof ContactsSchema>;

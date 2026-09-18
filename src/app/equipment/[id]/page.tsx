@@ -15,11 +15,11 @@ export default async function EquipmentPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const item = await getEquipmentById(id);
+    const item = await getEquipmentById(id);
 
-  if (!item) notFound();
+    if (!item) notFound();
 
-  const specEntries = Object.entries(item.specs).slice(0, 3);
+    const specEntries = Object.entries(item.specs).slice(0, 3);
 
   return (
     <main className={styles.page}>
