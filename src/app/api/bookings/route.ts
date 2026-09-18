@@ -1,4 +1,9 @@
-import { calculateTotals, type CartItem, type CartTotals, validateDates } from "@/app/shared/cart/model";
+import {
+  calculateTotals,
+  type CartItem,
+  type CartTotals,
+  validateDates,
+} from "@/app/shared/cart/model";
 import { equipment } from "@/server/mock/equipment";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -93,11 +98,15 @@ export async function POST(request: Request) {
       { status: 409 },
     );
   }
-
-  
+  if (request.headers.get("X-Simulate-Payment-Failure") === "1") {
+    return NextResponse.json(
+      { message: "Платёж не прошёл. Попробуйте ещё раз." },
+      { status: 502 },
+    );
+  }
 
   const cartItems = parsed.data.items.map((requested) => {
-    const found = equipment.find((e) => e.id === requested.id)!
+    const found = equipment.find((e) => e.id === requested.id)!;
     return {
       id: found.id,
       name: found.name,
@@ -105,8 +114,8 @@ export async function POST(request: Request) {
       pricePerDay: found.pricePerDay,
       deposit: found.deposit,
       qty: requested.qty,
-    }
-  })
+    };
+  });
   const totals = calculateTotals({
     items: cartItems,
     from: parsed.data.from,

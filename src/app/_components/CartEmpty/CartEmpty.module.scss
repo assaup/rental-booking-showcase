@@ -1,0 +1,39 @@
+.page {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-7);
+}
+
+/* ---------- пусто ---------- */
+
+.empty {
+  max-width: 420px;
+  margin: var(--space-7) auto;
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.emptyTitle {
+  margin-bottom: var(--space-2);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.emptyText {
+  margin-bottom: var(--space-4);
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.emptyLink {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  background: var(--color-pine);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}

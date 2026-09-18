@@ -15,6 +15,10 @@ export interface Conflict {
   requested: number;
   available: number;
 }
+export interface BookingError {
+  message: string;
+  conflicts?: Conflict[];
+}
 
 export async function createBooking(
   payload: BookingPayload,
@@ -29,9 +33,6 @@ export async function createBooking(
     body: JSON.stringify(payload),
   });
 
-  if (!res.ok) await throwApiError(res)
+  if (!res.ok) await throwApiError(res);
   return res.json();
-  
 }
-
-
