@@ -39,6 +39,6 @@ export async function POST(request: Request) {
     path: "/",
   });
 
-  return Response.json({ safeUser })
+  return Response.json({ user: safeUser })
 
 }

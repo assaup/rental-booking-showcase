@@ -8,9 +8,9 @@ export interface User {
 export const users: User[] = [
   {
     id: "u1",
-    email: "alexey@mail.ru",
+    email: "samir@mail.ru",
     password: "123456",
-    name: "Алексей Морозов",
+    name: "Самир",
   },
 ];
 

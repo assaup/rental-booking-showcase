@@ -3,10 +3,12 @@ import Link from "next/link";
 import styles from "./Header.module.scss";
 import { useCart } from "@/app/shared/cart/CartProvider";
 import { useMounted } from "@/app/shared/hooks/useMounted";
+import { useAuth } from "@/app/shared/auth/AuthProvider";
 
 export function Header() {
   const mounted = useMounted();
   const { state } = useCart();
+  const { user, loading, logout } = useAuth();
 
   const totalQty = state.items.reduce((sum, item) => sum + item.qty, 0);
 
@@ -41,6 +43,23 @@ export function Header() {
               <span className={styles.cartCount}>{totalQty}</span>
             )}
           </Link>
+          {!loading &&
+            (user ? (
+              <div className={styles.user}>
+                <span className={styles.userName}>{user.name}</span>
+                <button
+                  type="button"
+                  className={styles.logout}
+                  onClick={logout}
+                >
+                  Выйти
+                </button>
+              </div>
+            ) : (
+              <Link href="/login" className={styles.login}>
+                Войти
+              </Link>
+            ))}
         </div>
       </div>
     </header>

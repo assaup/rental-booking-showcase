@@ -5,6 +5,8 @@ import {
   validateDates,
 } from "@/app/shared/cart/model";
 import { equipment } from "@/server/mock/equipment";
+import { sessions } from "@/server/mock/users";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -142,5 +144,13 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+  const userId = token ? sessions.get(token) : undefined;
+
+  if (!userId) {
+    return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
+  }
+
   return NextResponse.json({ bookings });
 }
