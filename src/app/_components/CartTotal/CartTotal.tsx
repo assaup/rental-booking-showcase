@@ -16,6 +16,7 @@ import {
 import { ApiError } from "@/shared/api/error";
 import { CartError } from "../CartError/CartError";
 import styles from "./CartTotal.module.scss";
+import { useAuth } from "@/app/shared/auth/AuthProvider";
 
 interface Props {
   contacts: Contacts;
@@ -35,6 +36,7 @@ export function CartTotal({
   const { state, totals, dispatch } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const { clearSession } = useAuth()
 
   const contactsResult = ContactsSchema.safeParse(contacts);
   const canSubmit =
@@ -71,7 +73,8 @@ export function CartTotal({
             break;
           }
           case 401:
-            router.push("/login");
+            clearSession()
+            router.push("/login?from=/cart");
             break;
           default:
             onError({ message: err.message });

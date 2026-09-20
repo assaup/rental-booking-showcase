@@ -1,4 +1,6 @@
-import { throwApiError } from "./error";
+import { cookies } from "next/headers";
+import { ApiError, throwApiError } from "./error";
+import { redirect } from "next/dist/server/api-utils";
 
 export interface BookingPayload {
   from: string;
@@ -35,4 +37,21 @@ export async function createBooking(
 
   if (!res.ok) await throwApiError(res);
   return res.json();
+}
+
+export async function getBookings(cookieHeader: string): Promise<Booking[]> {
+
+  const res = await fetch(`${BASE_URL}/api/bookings`, {
+    headers: { Cookie: cookieHeader },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null)
+    throw new ApiError(res.status, body?.message ?? `Ошибка ${res.status}`, body);
+  }
+  const data = res.json()
+  return data.bookings
+
+  // fetch с заголовком Cookie
+  // 401 → бросить ApiError, страница поймает и сделает redirect
 }

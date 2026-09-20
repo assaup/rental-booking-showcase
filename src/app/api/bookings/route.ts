@@ -4,9 +4,8 @@ import {
   type CartTotals,
   validateDates,
 } from "@/app/shared/cart/model";
+import { getSessionUserId } from "@/server/auth";
 import { equipment } from "@/server/mock/equipment";
-import { sessions } from "@/server/mock/users";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -37,6 +36,7 @@ interface Booking {
   extras: string[];
   contacts: { name: string; phone: string };
   totals: CartTotals;
+  userId: string
 }
 
 const bookings: Booking[] = [];
@@ -49,6 +49,10 @@ function generateBookingNumber(): string {
 }
 
 export async function POST(request: Request) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
+  }
   const idempotencyKey = request.headers.get("Idempotency-Key");
   if (idempotencyKey) {
     const existing = processedKeys.get(idempotencyKey);
@@ -135,6 +139,7 @@ export async function POST(request: Request) {
     extras: parsed.data.extras,
     contacts: parsed.data.contacts,
     totals,
+    userId
   });
 
   if (idempotencyKey) {
@@ -144,13 +149,13 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
-  const userId = token ? sessions.get(token) : undefined;
+  const userId = await getSessionUserId();
 
   if (!userId) {
     return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
   }
 
-  return NextResponse.json({ bookings });
+  return NextResponse.json({
+    bookings: bookings.filter((b) => b.userId === userId),
+  });
 }
