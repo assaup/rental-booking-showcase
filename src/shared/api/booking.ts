@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
 import { ApiError, throwApiError } from "./error";
-import { redirect } from "next/dist/server/api-utils";
+import { CartItem, CartTotals } from "@/app/shared/cart/model";
 
 export interface BookingPayload {
   from: string;
@@ -20,6 +19,16 @@ export interface Conflict {
 export interface BookingError {
   message: string;
   conflicts?: Conflict[];
+}
+export interface Booking {
+  bookingNumber: string;
+  createdAt: string;
+  from: string;
+  to: string;
+  items: CartItem[];
+  extras: string[];
+  contacts: { name: string; phone: string };
+  totals: CartTotals;
 }
 
 export async function createBooking(
@@ -45,13 +54,10 @@ export async function getBookings(cookieHeader: string): Promise<Booking[]> {
     headers: { Cookie: cookieHeader },
     cache: "no-store",
   });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null)
-    throw new ApiError(res.status, body?.message ?? `Ошибка ${res.status}`, body);
-  }
-  const data = res.json()
+  
+  if (!res.ok) await throwApiError(res);
+
+  const data = await res.json()
   return data.bookings
 
-  // fetch с заголовком Cookie
-  // 401 → бросить ApiError, страница поймает и сделает redirect
 }

@@ -2,11 +2,22 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { categoryLabel } from "../shared/labels";
 import styles from "./page.module.scss";
+import { getBookings, type Booking } from "@/shared/api/booking";
+import { cookies } from "next/headers";
+import { ApiError } from "@/shared/api/error";;
 
 export default async function HistoryPage() {
-  const booking = 
-  // TODO: получить брони с сервера
-  // TODO: при 401 → redirect("/login?from=/history")
+
+  const cookie = (await cookies()).toString()
+  let bookings: Booking[]
+  try {
+    bookings = await getBookings(cookie)
+  } catch (err){
+    if (err instanceof ApiError && err.status === 401) {
+      redirect("/login?from=/history")
+    }
+    throw err
+  }
 
   if (bookings.length === 0) {
     return (
