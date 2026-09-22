@@ -4,6 +4,7 @@ import styles from "./Header.module.scss";
 import { useCart } from "@/app/shared/cart/CartProvider";
 import { useMounted } from "@/app/shared/hooks/useMounted";
 import { useAuth } from "@/app/shared/auth/AuthProvider";
+import { PeriodPicker } from "../PeriodPicker/PeriodPicker";
 
 export function Header() {
   const mounted = useMounted();
@@ -33,9 +34,7 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <button type="button" className={styles.dates}>
-            14–17 сентября
-          </button>
+          <PeriodPicker variant="compact"/>
 
           <Link href="/cart" className={styles.cart}>
             Корзина

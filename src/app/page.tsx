@@ -7,11 +7,11 @@ import {
 import { CatalogFilters } from "./_components/CatalogFilters/CatalogFilters";
 import { CatalogPagination } from "./_components/CatalogPagination/CatalogPagination";
 import Link from "next/link";
-import { Recommendations } from "./_components/Recommendations/Recommendations";
-import { SafeBlock } from "./_components/SafeBlock";
 import { EquipmentCard } from "./_components/EquipmentCard/EquipmentCard";
 import styles from "./page.module.scss";
 import CatalogHead from "./_components/CatalogHead/CatalogHead";
+import { PeriodPicker } from "./_components/PeriodPicker/PeriodPicker";
+import { CatalogDatesSync } from "./_components/CatalogDatesSync/CatalogDatesSync";
 
 export default async function Home({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
 
@@ -31,10 +31,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Raw
           </p>
         </div>
         <div className={styles.rightPart}>
-          <div className={styles.rent}>
-            <h2>Период аренды</h2>
-            <p>14 сен, 10:00 - 17 сен, 18:00</p>
-          </div>
+          <CatalogDatesSync />
+          <PeriodPicker hint="Наличие и цена считаются на этот период."/>
         </div>
       </div>
       <div className={styles.layout}>
