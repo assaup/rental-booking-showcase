@@ -118,32 +118,6 @@
   color: var(--color-muted);
 }
 
-/* ---------- пустая выдача ---------- */
-
-.empty {
-  padding: var(--space-7) var(--space-5);
-  text-align: center;
-  background: var(--color-surface);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-.emptyTitle {
-  margin-bottom: var(--space-2);
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.emptyReset {
-  display: inline-block;
-  margin-top: var(--space-3);
-  color: var(--color-accent);
-  font-weight: 600;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
 
 /* ---------- рекомендации ---------- */
 

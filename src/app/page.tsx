@@ -6,15 +6,18 @@ import {
 } from "@/shared/api/params";
 import { CatalogFilters } from "./_components/CatalogFilters/CatalogFilters";
 import { CatalogPagination } from "./_components/CatalogPagination/CatalogPagination";
-import Link from "next/link";
 import { EquipmentCard } from "./_components/EquipmentCard/EquipmentCard";
 import styles from "./page.module.scss";
 import CatalogHead from "./_components/CatalogHead/CatalogHead";
 import { PeriodPicker } from "./_components/PeriodPicker/PeriodPicker";
 import { CatalogDatesSync } from "./_components/CatalogDatesSync/CatalogDatesSync";
+import { SearchIcon, StateCard, StateLink } from "./_components/StateCard/StateCard";
 
-export default async function Home({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
-
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<RawSearchParams>;
+}) {
   const { params, notices } = parseCatalogParams(await searchParams);
   const query = buildQuery(params);
   const data = await getEquipmentList(query);
@@ -32,47 +35,56 @@ export default async function Home({ searchParams }: { searchParams: Promise<Raw
         </div>
         <div className={styles.rightPart}>
           <CatalogDatesSync />
-          <PeriodPicker hint="Наличие и цена считаются на этот период."/>
+          <PeriodPicker hint="Наличие и цена считаются на этот период." />
         </div>
       </div>
       <div className={styles.layout}>
-      
-      <aside className={styles.sidebar}>
-        <CatalogFilters />
-      </aside>
-      <div>
-        <CatalogHead total={data.total}/>
-        {notices.length > 0 && (
-          <div role="status">
-            <p>Некоторые параметры ссылки были исправлены:</p>
-            <ul>
-              {notices.map((notice) => (
-                <li key={notice}>{notice}</li>
+        <aside className={styles.sidebar}>
+          <CatalogFilters />
+        </aside>
+        <div>
+          <CatalogHead total={data.total} />
+          {notices.length > 0 && (
+            <div role="status">
+              <p>Некоторые параметры ссылки были исправлены:</p>
+              <ul>
+                {notices.map((notice) => (
+                  <li key={notice}>{notice}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {items.length === 0 ? (
+            <StateCard
+              centered
+              icon={<SearchIcon />}
+              title="Ничего не найдено"
+              text="На эти даты нет подходящих позиций. Снимите один фильтр или измените период."
+              actions={
+                <StateLink variant="primary" href="/">
+                  Сбросить фильтры
+                </StateLink>
+              }
+            />
+          ) : (
+            <ul className={styles.grid}>
+              {items.map((item) => (
+                <EquipmentCard
+                  key={item.id}
+                  item={item}
+                  from={params.from}
+                  to={params.to}
+                />
               ))}
             </ul>
-          </div>
-        )}
-        {items.length === 0 ? (
-          <div>
-            <p>По вашим фильтрам ничего не нашлось</p>
-            <Link href="/">Сбросить фильтры</Link>
-          </div>
-        ) : (
-          <ul className={styles.grid}>
-            {items.map((item) => (
-              <EquipmentCard key={item.id} item={item} from={params.from} to={params.to} />
-            ))}
-          </ul>
-        )}
-        <CatalogPagination
-          page={data.page}
-          totalPages={data.totalPages}
-          query={query}
-        />
+          )}
+          <CatalogPagination
+            page={data.page}
+            totalPages={data.totalPages}
+            query={query}
+          />
+        </div>
       </div>
-    </div>
     </main>
-    
-    
   );
 }

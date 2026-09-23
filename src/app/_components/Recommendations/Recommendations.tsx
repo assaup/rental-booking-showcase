@@ -4,7 +4,7 @@ import styles from "./Recommendations.module.scss";
 import { categoryLabel } from "@/shared/labels";
 
 export async function Recommendations({ excludeId }: { excludeId?: string }) {
-  const query = new URLSearchParams({ sort: "price_asc", limit: "4" });
+  const query = new URLSearchParams({ sort: "price_asc", limit: "4"}); // fail: "1" в массив -> частичный сбой блока рекомендаций
   const data = await getEquipmentList(query);
 
   const items = data.items.filter((item) => item.id !== excludeId).slice(0, 3);

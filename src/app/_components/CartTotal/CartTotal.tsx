@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useCart } from "@/shared/cart/CartProvider";
 import { ContactsSchema, type Contacts } from "@/shared/cart/model";
 import {
@@ -14,7 +13,6 @@ import {
   type Conflict,
 } from "@/shared/api/booking";
 import { ApiError } from "@/shared/api/error";
-import { CartError } from "../CartError/CartError";
 import styles from "./CartTotal.module.scss";
 import { useAuth } from "@/shared/auth/AuthProvider";
 
@@ -29,14 +27,12 @@ interface Props {
 export function CartTotal({
   contacts,
   dateValid,
-  error,
   onError,
   onSuccess,
 }: Props) {
   const { state, totals, dispatch } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [simulateFailure, setSimulateFailure] = useState(false);
-  const router = useRouter();
   const { clearSession } = useAuth();
 
   const contactsResult = ContactsSchema.safeParse(contacts);
@@ -70,18 +66,23 @@ export function CartTotal({
         switch (err.status) {
           case 409: {
             const data = err.data as { conflicts?: Conflict[] };
-            onError({ message: err.message, conflicts: data.conflicts });
+            onError({
+              status: err.status,
+              message: err.message,
+              conflicts: data.conflicts,
+            });
             break;
           }
           case 401:
             clearSession();
-            router.push("/login?from=/cart");
+            onError({ status: 401, message: err.message });
             break;
           default:
-            onError({ message: err.message });
+            onError({ status: err.status, message: err.message });
         }
       } else {
         onError({
+          status: 0,  
           message: "Нет соединения. Проверьте сеть и повторите действие.",
         });
       }
@@ -129,8 +130,6 @@ export function CartTotal({
       >
         {submitting ? "Отправляем…" : "Подтвердить бронирование"}
       </button>
-
-      {error && <CartError error={error} onResolved={() => onError(null)} />}
 
       <p className={styles.submitHint}>
         Повторное нажатие не создаст дубликат заказа.

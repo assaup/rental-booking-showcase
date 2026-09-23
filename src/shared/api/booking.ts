@@ -16,6 +16,7 @@ export interface Conflict {
   available: number;
 }
 export interface BookingError {
+  status: number;
   message: string;
   conflicts?: Conflict[];
 }

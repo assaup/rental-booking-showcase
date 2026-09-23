@@ -64,7 +64,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ message: "Временный сбой" }, { status: 503 });
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 700));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const items = result.slice(start, start + limit).map((item) => ({
     ...item,
     free: from && to ? freeQty(item, from, to) : item.stock,

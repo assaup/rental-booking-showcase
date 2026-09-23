@@ -1,48 +1,44 @@
-.errorBox {
-  margin-top: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  background: #fdf0ec;
-  border: 1px solid #f0cec2;
-  border-radius: var(--radius-md);
-}
-
-.errorTitle {
-  color: #a8412a;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.conflictList {
+.conflicts {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin: var(--space-3) 0;
+  gap: 7px;
+  width: 100%;
 }
 
-.conflictItem {
+.conflict {
   display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.conflictDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9a5a24;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.summaryLabel {
+  color: var(--color-muted);
   font-size: 12px;
 }
 
-.conflictQty {
-  flex-shrink: 0;
-  color: var(--color-muted);
-}
-
-.recalc {
-  width: 100%;
-  padding: 9px;
-  border: 1px solid #d99a86;
-  border-radius: var(--radius-sm);
-  background: #fff;
-  color: #a8412a;
-  font-size: 13px;
-  font-weight: 600;
-  transition: background 0.12s ease;
-
-  &:hover {
-    background: #fdf6f4;
-  }
+.summaryValue {
+  font-size: 17px;
+  font-weight: 700;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { type Contacts, validateDates } from "@/shared/cart/model";
 import { useCart } from "@/shared/cart/CartProvider";
 import { useMounted } from "@/shared/hooks/useMounted";
@@ -13,14 +13,25 @@ import { CartItems } from "../_components/CartItems/CartItems";
 import { CartTotal } from "../_components/CartTotal/CartTotal";
 import { PeriodPicker } from "../_components/PeriodPicker/PeriodPicker";
 import styles from "./page.module.scss";
+import { CartError } from "../_components/CartError/CartError";
+import { useAuth } from "@/shared/auth/AuthProvider";
+import Link from "next/link";
 
 export default function CartPage() {
-  const { state } = useCart();
+  const { state, totals } = useCart();
+  const { user, loading } = useAuth();
   const mounted = useMounted();
 
   const [contacts, setContacts] = useState<Contacts>({ name: "", phone: "" });
   const [bookingNumber, setBookingNumber] = useState<string | null>(null);
   const [error, setError] = useState<BookingError | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [error]);
 
   if (!mounted) return null;
   if (bookingNumber) return <BookingSuccess bookingNumber={bookingNumber} />;
@@ -37,6 +48,15 @@ export default function CartPage() {
           {state.items.length} позиции · пункт на Лесной, 18
         </p>
       </header>
+      {error && (
+        <div ref={errorRef} className={styles.errorSlot}>
+          <CartError
+            error={error}
+            onResolved={() => setError(null)}
+            total={totals.total}
+          />
+        </div>
+      )}
 
       <div className={styles.layout}>
         <div className={styles.main}>
@@ -49,7 +69,17 @@ export default function CartPage() {
         </div>
 
         <aside className={styles.side}>
-          <div className={styles.authNote}>Вы вошли как alexey@mail.ru</div>
+          {!loading &&
+            (user ? (
+              <div className={styles.authNote}>Вы вошли как {user.email}</div>
+            ) : (
+              <div className={styles.authNoteWarn}>
+                Войдите, чтобы подтвердить бронирование.{" "}
+                <Link href="/login?from=/cart" className={styles.authLink}>
+                  Войти
+                </Link>
+              </div>
+            ))}
 
           <ContactsForm value={contacts} onChange={setContacts} />
 

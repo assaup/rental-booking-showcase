@@ -1,11 +1,21 @@
-import Link from "next/link";
+import { StateCard, StateLink } from "./_components/StateCard/StateCard";
+import styles from "./not-found.module.scss";
 
 export default function NotFound() {
   return (
-    <main>
-      <h1>Страница не найдена</h1>
-      <p>Возможно, позиция снята с проката или ссылка устарела.</p>
-      <Link href="/">Вернуться в каталог</Link>
+    <main className={styles.page}>
+      <StateCard
+        centered
+        code="404"
+        tone="accent"
+        title="Снаряжение не найдено"
+        text="Позицию могли снять с проката. Даты и корзина сохранены."
+        actions={
+          <StateLink variant="ghost" href="/">
+            ← Вернуться в каталог
+          </StateLink>
+        }
+      />
     </main>
   );
 }

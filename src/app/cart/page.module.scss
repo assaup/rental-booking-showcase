@@ -75,3 +75,26 @@
     font-size: 27px;
   }
 }
+
+.errorSlot {
+  margin-bottom: var(--space-5);
+
+  > * {
+    max-width: 560px;
+  }
+}
+
+.authNoteWarn {
+  padding: var(--space-3) var(--space-4);
+  background: #fdf4e3;
+  border: 1px solid #f0dfbc;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+}
+
+.authLink {
+  color: var(--color-accent);
+  font-weight: 600;
+
+  &:hover { text-decoration: underline; }
+}
