@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./ContactsForm.module.scss";
-import { type Contacts, ContactsSchema } from "@/app/shared/cart/model";
+import { type Contacts, ContactsSchema } from "@/shared/cart/model";
 
 interface Props {
   value: Contacts;

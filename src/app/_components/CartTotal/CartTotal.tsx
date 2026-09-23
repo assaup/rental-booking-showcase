@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCart } from "@/app/shared/cart/CartProvider";
-import { ContactsSchema, type Contacts } from "@/app/shared/cart/model";
+import { useCart } from "@/shared/cart/CartProvider";
+import { ContactsSchema, type Contacts } from "@/shared/cart/model";
 import {
   clearIdempotencyKey,
   getIdempotencyKey,
-} from "@/app/shared/cart/idempotency";
+} from "@/shared/cart/idempotency";
 import {
   createBooking,
   type BookingError,
@@ -16,7 +16,7 @@ import {
 import { ApiError } from "@/shared/api/error";
 import { CartError } from "../CartError/CartError";
 import styles from "./CartTotal.module.scss";
-import { useAuth } from "@/app/shared/auth/AuthProvider";
+import { useAuth } from "@/shared/auth/AuthProvider";
 
 interface Props {
   contacts: Contacts;

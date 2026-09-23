@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@/app/shared/cart/CartProvider";
+import { useCart } from "@/shared/cart/CartProvider";
 import type { BookingError } from "@/shared/api/booking";
 import styles from "./CartError.module.scss";
 

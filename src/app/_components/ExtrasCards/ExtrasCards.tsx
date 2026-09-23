@@ -1,7 +1,7 @@
 "use client";
-import { EXTRAS } from '@/app/shared/cart/model';
+import { EXTRAS } from '@/shared/cart/model';
 import styles from './ExtrasCards.module.scss'
-import { useCart } from '@/app/shared/cart/CartProvider';
+import { useCart } from '@/shared/cart/CartProvider';
 
 
 export function ExtrasCards() {

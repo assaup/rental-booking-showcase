@@ -1,4 +1,4 @@
-import { type Category } from "@/app/shared/labels";
+import { type Category } from "@/shared/labels";
 
 export interface Equipment {
   id: string;
@@ -14,7 +14,10 @@ export interface Equipment {
   bookedDates?: string[];
 }
 
-const img = (n: number) => [`/placeholder/${n}-1.jpg`, `/placeholder/${n}-2.jpg`];
+const img = (n: number) => [
+  `/placeholder/${n}-1.jpg`,
+  `/placeholder/${n}-2.jpg`,
+];
 function daysFromToday(n: number): string {
   const date = new Date();
   date.setDate(date.getDate() + n);
@@ -73,7 +76,11 @@ export const equipment: Equipment[] = [
     pricePerDay: 1900,
     deposit: 18000,
     images: img(5),
-    specs: { Длина: "335 см", Нагрузка: "140 кг", Комплект: "весло, насос, лиш" },
+    specs: {
+      Длина: "335 см",
+      Нагрузка: "140 кг",
+      Комплект: "весло, насос, лиш",
+    },
     rules: ["Обязателен спасжилет"],
     stock: 2,
   },

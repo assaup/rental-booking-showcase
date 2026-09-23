@@ -1,15 +1,15 @@
-'use client'
-import styles from './CartItems.module.scss'
-import { type Conflict } from '@/shared/api/booking';
-import { categoryLabel } from '@/app/shared/labels';
-import { useCart } from '@/app/shared/cart/CartProvider';
+"use client";
+import styles from "./CartItems.module.scss";
+import { type Conflict } from "@/shared/api/booking";
+import { categoryLabel } from "@/shared/labels";
+import { useCart } from "@/shared/cart/CartProvider";
 
 interface Props {
-    error: { message: string; conflicts?: Conflict[]} | null;
+  error: { message: string; conflicts?: Conflict[] } | null;
 }
 
-export function CartItems({error}: Props) {
-    const { state, totals, dispatch } = useCart();
+export function CartItems({ error }: Props) {
+  const { state, totals, dispatch } = useCart();
   return (
     <ul className={styles.items}>
       {state.items.map((item) => (

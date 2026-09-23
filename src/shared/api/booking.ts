@@ -1,6 +1,6 @@
 import { BASE_URL } from "./config";
-import { ApiError, throwApiError } from "./error";
-import { CartItem, CartTotals } from "@/app/shared/cart/model";
+import { throwApiError } from "./error";
+import { CartItem, CartTotals } from "@/shared/cart/model";
 
 export interface BookingPayload {
   from: string;
@@ -9,7 +9,6 @@ export interface BookingPayload {
   extras: string[];
   contacts: { name: string; phone: string };
 }
-
 
 export interface Conflict {
   id: string;
@@ -34,7 +33,7 @@ export interface Booking {
 export async function createBooking(
   payload: BookingPayload,
   idempotencyKey: string,
-  simulateFailule:boolean = false,
+  simulateFailule: boolean = false,
 ): Promise<{ bookingNumber: string }> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

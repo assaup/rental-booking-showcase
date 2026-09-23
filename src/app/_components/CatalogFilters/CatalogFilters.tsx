@@ -1,11 +1,10 @@
 "use client";
-import { CATEGORIES } from './../../shared/labels';
-import styles from './CatalogFilters.module.scss'
-import { useCatalogParams } from "@/app/shared/hooks/useCatalogParams";
+import { CATEGORIES } from "@/shared/labels";
+import styles from "./CatalogFilters.module.scss";
+import { useCatalogParams } from "@/shared/hooks/useCatalogParams";
 
 export function CatalogFilters() {
-
-  const {isPending, setParam, searchParams, reset } = useCatalogParams()
+  const { isPending, setParam, searchParams, reset } = useCatalogParams();
 
   return (
     <div className={`${styles.panel} ${isPending ? styles.pending : ""}`}>
@@ -53,7 +52,7 @@ export function CatalogFilters() {
         <div className={styles.prices}>
           <input
             type="number"
-            key={`priceMin-${searchParams.get('priceMin') ?? ''}`}
+            key={`priceMin-${searchParams.get("priceMin") ?? ""}`}
             className={styles.priceInput}
             placeholder="от 300 ₽"
             defaultValue={searchParams.get("priceMin") ?? ""}
@@ -61,7 +60,7 @@ export function CatalogFilters() {
           />
           <input
             type="number"
-            key={`priceMax-${searchParams.get('priceMax') ?? ''}`}
+            key={`priceMax-${searchParams.get("priceMax") ?? ""}`}
             className={styles.priceInput}
             placeholder="до 2 500 ₽"
             defaultValue={searchParams.get("priceMax") ?? ""}

@@ -1,7 +1,7 @@
 import {
   calculateTotals,
   validateDates,
-} from "@/app/shared/cart/model";
+} from "@/shared/cart/model";
 import { getSessionUserId } from "@/server/auth";
 import { freeQty } from "@/server/availability";
 import { bookings} from "@/server/mock/bookings";

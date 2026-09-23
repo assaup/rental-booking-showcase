@@ -1,6 +1,6 @@
-'use client'
-import styles from './CatalogHead.module.scss'
-import { useCatalogParams } from "@/app/shared/hooks/useCatalogParams";
+"use client";
+import styles from "./CatalogHead.module.scss";
+import { useCatalogParams } from "@/shared/hooks/useCatalogParams";
 
 const CATEGORY_LABELS: Record<string, string> = {
   tents: "Палатки",
@@ -17,19 +17,14 @@ const CHIP_LABELS: Record<string, (value: string) => string> = {
 };
 
 export default function CatalogHead({ total }: { total: number }) {
-
-
-
-  const {isPending, setParam, searchParams } = useCatalogParams()
-
-
+  const { isPending, setParam, searchParams } = useCatalogParams();
 
   const chips = Object.entries(CHIP_LABELS)
     .map(([key, format]) => {
       const value = searchParams.get(key);
       return value ? { key, label: format(value) } : null;
     })
-    .filter((chip) => chip !== null)
+    .filter((chip) => chip !== null);
 
   return (
     <div className={isPending ? styles.pending : ""}>
@@ -70,7 +65,5 @@ export default function CatalogHead({ total }: { total: number }) {
         </div>
       )}
     </div>
-  )
-
-
+  );
 }

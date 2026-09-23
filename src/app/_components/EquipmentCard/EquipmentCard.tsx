@@ -1,8 +1,7 @@
 import Link from "next/link";
 import styles from "./EquipmentCard.module.scss";
 import { type EquipmentListItem } from "@/shared/api/equipment";
-import { categoryLabel } from "@/app/shared/labels";
-
+import { categoryLabel } from "@/shared/labels";
 
 interface Props {
   item: EquipmentListItem;
@@ -11,15 +10,13 @@ interface Props {
 }
 
 export function EquipmentCard({ item, from, to }: Props) {
-
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
   if (from && to) {
-    params.set('from', from)
-    params.set('to', to)
+    params.set("from", from);
+    params.set("to", to);
   }
   const query = params.toString();
-  const href = `/equipment/${item.id}${query ? `?${query}` : ""}`
-
+  const href = `/equipment/${item.id}${query ? `?${query}` : ""}`;
 
   const label =
     item.free === 0
@@ -29,11 +26,11 @@ export function EquipmentCard({ item, from, to }: Props) {
         : "Доступно";
 
   const dotClass =
-  item.free === 0
-    ? styles.badgeDotBusy
-    : item.free <= 2
-      ? styles.badgeDotLow
-      : "";
+    item.free === 0
+      ? styles.badgeDotBusy
+      : item.free <= 2
+        ? styles.badgeDotLow
+        : "";
 
   return (
     <li className={styles.card}>

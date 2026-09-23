@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getEquipmentList } from "@/shared/api/equipment";
 import styles from "./Recommendations.module.scss";
-import { categoryLabel } from "@/app/shared/labels";
+import { categoryLabel } from "@/shared/labels";
 
 export async function Recommendations({ excludeId }: { excludeId?: string }) {
   const query = new URLSearchParams({ sort: "price_asc", limit: "4" });
@@ -26,7 +26,9 @@ export async function Recommendations({ excludeId }: { excludeId?: string }) {
             <Link href={`/equipment/${item.id}`} className={styles.card}>
               <div className={styles.photo} />
               <div>
-                <p className={styles.category}>{categoryLabel(item.category)}</p>
+                <p className={styles.category}>
+                  {categoryLabel(item.category)}
+                </p>
                 <p className={styles.name}>{item.name}</p>
                 <p className={styles.price}>{item.pricePerDay} ₽ / день</p>
               </div>
@@ -48,7 +50,9 @@ export function RecommendationsSkeleton() {
             <div className={`${styles.skeleton} ${styles.skeletonPhoto}`} />
             <div className={styles.skeletonLines}>
               <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
-              <div className={`${styles.skeleton} ${styles.skeletonLineShort}`} />
+              <div
+                className={`${styles.skeleton} ${styles.skeletonLineShort}`}
+              />
             </div>
           </div>
         ))}

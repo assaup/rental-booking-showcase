@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { type Contacts, validateDates } from "../shared/cart/model";
-import { useCart } from "../shared/cart/CartProvider";
-import { useMounted } from "../shared/hooks/useMounted";
+import { type Contacts, validateDates } from "@/shared/cart/model";
+import { useCart } from "@/shared/cart/CartProvider";
+import { useMounted } from "@/shared/hooks/useMounted";
 import type { BookingError } from "@/shared/api/booking";
 import { CartEmpty } from "../_components/CartEmpty/CartEmpty";
 import { BookingSuccess } from "../_components/BookingSuccess/BookingSuccess";

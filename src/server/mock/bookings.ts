@@ -1,4 +1,4 @@
-import type { CartItem, CartTotals } from "@/app/shared/cart/model";
+import type { CartItem, CartTotals } from "@/shared/cart/model";
 
 export interface Booking {
   bookingNumber: string;

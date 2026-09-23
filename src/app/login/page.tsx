@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "../shared/auth/AuthProvider";
+import { useAuth } from "@/shared/auth/AuthProvider";
 import { LoginForm } from "../_components/LoginForm/LoginForm";
 import styles from "./page.module.scss";
 

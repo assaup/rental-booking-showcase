@@ -1,22 +1,21 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { categoryLabel } from "../shared/labels";
+import { categoryLabel } from "@/shared/labels";
 import styles from "./page.module.scss";
 import { getBookings, type Booking } from "@/shared/api/booking";
 import { cookies } from "next/headers";
-import { ApiError } from "@/shared/api/error";;
+import { ApiError } from "@/shared/api/error";
 
 export default async function HistoryPage() {
-
-  const cookie = (await cookies()).toString()
-  let bookings: Booking[]
+  const cookie = (await cookies()).toString();
+  let bookings: Booking[];
   try {
-    bookings = await getBookings(cookie)
-  } catch (err){
+    bookings = await getBookings(cookie);
+  } catch (err) {
     if (err instanceof ApiError && err.status === 401) {
-      redirect("/login?from=/history")
+      redirect("/login?from=/history");
     }
-    throw err
+    throw err;
   }
 
   if (bookings.length === 0) {
@@ -25,7 +24,8 @@ export default async function HistoryPage() {
         <div className={styles.empty}>
           <h1 className={styles.emptyTitle}>Броней пока нет</h1>
           <p className={styles.emptyText}>
-            Выберите снаряжение на нужные даты — оформленные заказы появятся здесь.
+            Выберите снаряжение на нужные даты — оформленные заказы появятся
+            здесь.
           </p>
           <Link href="/" className={styles.emptyLink}>
             Перейти в каталог
@@ -50,7 +50,9 @@ export default async function HistoryPage() {
           <li key={booking.bookingNumber} className={styles.booking}>
             <div className={styles.bookingHead}>
               <div>
-                <p className={styles.bookingNumber}>Бронь {booking.bookingNumber}</p>
+                <p className={styles.bookingNumber}>
+                  Бронь {booking.bookingNumber}
+                </p>
                 <p className={styles.bookingDates}>
                   {formatDate(booking.from)} — {formatDate(booking.to)} ·{" "}
                   {booking.totals.days} дн.
@@ -73,7 +75,8 @@ export default async function HistoryPage() {
                     </p>
                     <p className={styles.itemName}>{item.name}</p>
                     <p className={styles.itemMeta}>
-                      {item.pricePerDay} ₽ × {booking.totals.days} дн. × {item.qty} шт.
+                      {item.pricePerDay} ₽ × {booking.totals.days} дн. ×{" "}
+                      {item.qty} шт.
                     </p>
                   </div>
                   <p className={styles.itemSum}>
@@ -114,8 +117,18 @@ export default async function HistoryPage() {
 function formatDate(iso: string): string {
   const [, month, day] = iso.split("-");
   const months = [
-    "января", "февраля", "марта", "апреля", "мая", "июня",
-    "июля", "августа", "сентября", "октября", "ноября", "декабря",
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
   ];
   return `${Number(day)} ${months[Number(month) - 1]}`;
 }

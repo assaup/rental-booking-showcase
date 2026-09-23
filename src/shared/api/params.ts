@@ -1,4 +1,4 @@
-import { CategorySchema } from "@/app/shared/labels";
+import { CategorySchema } from "@/shared/labels";
 import { z } from "zod";
 export type RawSearchParams = {
   [key: string]: string | string[] | undefined;
@@ -9,8 +9,14 @@ export const CatalogParamsSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(12),
   available: z.enum(["true", "false"]).optional(),
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   priceMin: z.coerce.number().min(0).optional(),
   priceMax: z.coerce.number().min(0).optional(),
 });
@@ -61,21 +67,21 @@ export function parseCatalogParams(raw: RawSearchParams): ParseResult {
     return { params: result.data, notices: [] };
   }
 
-  const notices: string[] = []
-  const cleaned: RawSearchParams = { ...raw  }
+  const notices: string[] = [];
+  const cleaned: RawSearchParams = { ...raw };
   const seen = new Set<string>();
 
-  for (const issue of result.error.issues){
-    const field = String(issue.path[0])
+  for (const issue of result.error.issues) {
+    const field = String(issue.path[0]);
 
     if (seen.has(field)) continue;
     seen.add(field);
 
-    delete cleaned[field]
-    notices.push(messageFor(field))
+    delete cleaned[field];
+    notices.push(messageFor(field));
   }
 
-  const retry = CatalogParamsSchema.parse(cleaned)
+  const retry = CatalogParamsSchema.parse(cleaned);
 
   return { params: retry, notices };
 }

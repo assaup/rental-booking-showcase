@@ -7,7 +7,7 @@ import { Recommendations } from "@/app/_components/Recommendations/Recommendatio
 import styles from "./page.module.scss";
 import { RecommendationsSkeleton } from "@/app/_components/Recommendations/Recommendations";
 import { RecommendationsError } from "@/app/_components/Recommendations/RecommendationError";
-import { categoryLabel } from "@/app/shared/labels";
+import { categoryLabel } from "@/shared/labels";
 import { PeriodPicker } from "@/app/_components/PeriodPicker/PeriodPicker";
 
 export default async function EquipmentPage({
@@ -101,7 +101,7 @@ export default async function EquipmentPage({
               </span>
             </div>
             <div className={styles.periodBox}>
-              <PeriodPicker/>
+              <PeriodPicker />
             </div>
 
             <AddToCartButton

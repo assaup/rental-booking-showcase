@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCart } from "@/app/shared/cart/CartProvider";
-import { validateDates } from "@/app/shared/cart/model";
-import { useMounted } from "@/app/shared/hooks/useMounted";
+import { useCart } from "@/shared/cart/CartProvider";
+import { validateDates } from "@/shared/cart/model";
+import { useMounted } from "@/shared/hooks/useMounted";
 import styles from "./PeriodPicker.module.scss";
 
 interface Props {
@@ -112,7 +112,11 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
         </button>
 
         {open && (
-          <div className={styles.popover} role="dialog" aria-label="Период аренды">
+          <div
+            className={styles.popover}
+            role="dialog"
+            aria-label="Период аренды"
+          >
             <p className={styles.label}>Период аренды</p>
 
             {inputs}
@@ -145,7 +149,9 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
       <div className={styles.summary}>
         <p className={styles.label}>Период аренды</p>
         <p className={styles.value}>
-          {mounted && chosen ? formatRange(state.from!, state.to!) : "Не выбран"}
+          {mounted && chosen
+            ? formatRange(state.from!, state.to!)
+            : "Не выбран"}
           {mounted && chosen && totals.days > 0 && (
             <span className={styles.days}> · {totals.days} дн.</span>
           )}
@@ -163,13 +169,33 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
 /* ---------- помощники ---------- */
 
 const MONTHS = [
-  "января", "февраля", "марта", "апреля", "мая", "июня",
-  "июля", "августа", "сентября", "октября", "ноября", "декабря",
+  "января",
+  "февраля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
 ];
 
 const MONTHS_SHORT = [
-  "янв", "фев", "мар", "апр", "мая", "июн",
-  "июл", "авг", "сен", "окт", "ноя", "дек",
+  "янв",
+  "фев",
+  "мар",
+  "апр",
+  "мая",
+  "июн",
+  "июл",
+  "авг",
+  "сен",
+  "окт",
+  "ноя",
+  "дек",
 ];
 
 /** "2026-09-14", "2026-09-17" → "14–17 сентября"; разные месяцы → "28 сен – 2 окт" */

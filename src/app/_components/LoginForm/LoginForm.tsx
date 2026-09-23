@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/app/shared/auth/AuthProvider";
+import { useAuth } from "@/shared/auth/AuthProvider";
 import { ApiError } from "@/shared/api/error";
 import { useState, type SyntheticEvent } from "react";
 import { z } from "zod";
@@ -35,10 +35,10 @@ export function LoginForm({ onSuccess }: Props) {
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
-    if (!loginForm.success){
-        setTouched({email: true, password: true})
-        return
-    } 
+    if (!loginForm.success) {
+      setTouched({ email: true, password: true });
+      return;
+    }
     setSubmitting(true);
     setError(null);
 
@@ -63,8 +63,8 @@ export function LoginForm({ onSuccess }: Props) {
           placeholder="you@mail.ru"
           value={form.email}
           onChange={(e) => {
-            setForm({...form, email: e.target.value})
-            setTouched({...touched, email: false})
+            setForm({ ...form, email: e.target.value });
+            setTouched({ ...touched, email: false });
           }}
           onBlur={() => setTouched({ ...touched, email: true })}
         />
@@ -80,13 +80,11 @@ export function LoginForm({ onSuccess }: Props) {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           onBlur={() => setTouched({ ...touched, password: true })}
-
         />
         {errorFor("password") && (
           <span className={styles.fieldError}>{errorFor("password")}</span>
         )}
       </label>
-
 
       {error && (
         <p className={styles.formError} role="alert">

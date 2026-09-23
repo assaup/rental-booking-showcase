@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import styles from "./Header.module.scss";
-import { useCart } from "@/app/shared/cart/CartProvider";
-import { useMounted } from "@/app/shared/hooks/useMounted";
-import { useAuth } from "@/app/shared/auth/AuthProvider";
+import { useCart } from "@/shared/cart/CartProvider";
+import { useMounted } from "@/shared/hooks/useMounted";
+import { useAuth } from "@/shared/auth/AuthProvider";
 import { PeriodPicker } from "../PeriodPicker/PeriodPicker";
 
 export function Header() {
@@ -34,7 +34,7 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <PeriodPicker variant="compact"/>
+          <PeriodPicker variant="compact" />
 
           <Link href="/cart" className={styles.cart}>
             Корзина

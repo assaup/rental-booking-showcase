@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Header } from "./_components/Header/Header";
 import { Geist, Geist_Mono } from "next/font/google";
-import { CartProvider } from "./shared/cart/CartProvider";
+import { CartProvider } from "@/shared/cart/CartProvider";
 import "./globals.scss";
-import { AuthProvider } from "./shared/auth/AuthProvider";
+import { AuthProvider } from "@/shared/auth/AuthProvider";
 import { Suspense } from "react";
 
 const geistSans = Geist({
