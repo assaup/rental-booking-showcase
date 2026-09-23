@@ -35,8 +35,9 @@ export function CartTotal({
 }: Props) {
   const { state, totals, dispatch } = useCart();
   const [submitting, setSubmitting] = useState(false);
+  const [simulateFailure, setSimulateFailure] = useState(false);
   const router = useRouter();
-  const { clearSession } = useAuth()
+  const { clearSession } = useAuth();
 
   const contactsResult = ContactsSchema.safeParse(contacts);
   const canSubmit =
@@ -59,7 +60,7 @@ export function CartTotal({
     const key = getIdempotencyKey(state);
 
     try {
-      const booking = await createBooking(payload, key);
+      const booking = await createBooking(payload, key, simulateFailure);
 
       onSuccess(booking.bookingNumber);
       dispatch({ type: "clear" });
@@ -73,7 +74,7 @@ export function CartTotal({
             break;
           }
           case 401:
-            clearSession()
+            clearSession();
             router.push("/login?from=/cart");
             break;
           default:
@@ -112,11 +113,18 @@ export function CartTotal({
         <span className={styles.grandLabel}>К оплате</span>
         <span className={styles.grandValue}>{totals.total} ₽</span>
       </div>
-
+      <label className={styles.simulate}>
+        <input
+          type="checkbox"
+          checked={simulateFailure}
+          onChange={(e) => setSimulateFailure(e.target.checked)}
+        />
+        Имитировать сбой оплаты
+      </label>
       <button
         type="button"
         className={styles.submit}
-        onClick={handleSubmit}
+        onClick={() => handleSubmit()}
         disabled={!canSubmit || submitting}
       >
         {submitting ? "Отправляем…" : "Подтвердить бронирование"}

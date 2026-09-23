@@ -34,13 +34,19 @@ export interface Booking {
 export async function createBooking(
   payload: BookingPayload,
   idempotencyKey: string,
+  simulateFailule:boolean = false,
 ): Promise<{ bookingNumber: string }> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    IdempotencyKey: idempotencyKey,
+  };
+  if (simulateFailule) {
+    headers["X-Simulate-Payment-Failure"] = "1";
+  }
+
   const res = await fetch(`${BASE_URL}/api/bookings`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Idempotency-Key": idempotencyKey,
-    },
+    headers: headers,
     body: JSON.stringify(payload),
   });
 
@@ -49,15 +55,13 @@ export async function createBooking(
 }
 
 export async function getBookings(cookieHeader: string): Promise<Booking[]> {
-
   const res = await fetch(`${BASE_URL}/api/bookings`, {
     headers: { Cookie: cookieHeader },
     cache: "no-store",
   });
-  
+
   if (!res.ok) await throwApiError(res);
 
-  const data = await res.json()
-  return data.bookings
-
+  const data = await res.json();
+  return data.bookings;
 }
