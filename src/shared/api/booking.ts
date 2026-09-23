@@ -1,3 +1,4 @@
+import { BASE_URL } from "./config";
 import { ApiError, throwApiError } from "./error";
 import { CartItem, CartTotals } from "@/app/shared/cart/model";
 
@@ -9,7 +10,6 @@ export interface BookingPayload {
   contacts: { name: string; phone: string };
 }
 
-const BASE_URL = "http://localhost:3000";
 
 export interface Conflict {
   id: string;

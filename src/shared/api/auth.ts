@@ -1,3 +1,4 @@
+import { BASE_URL } from "./config";
 import { ApiError } from "./error";
 
 export interface User {
@@ -5,7 +6,6 @@ export interface User {
   email: string;
   name: string;
 }
-const BASE_URL = "http://localhost:3000";
 
 export async function login(email: string, password: string): Promise<User> {
   const res = await fetch(`${BASE_URL}/api/auth/login`, {

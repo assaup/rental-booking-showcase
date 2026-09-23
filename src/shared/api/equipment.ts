@@ -1,7 +1,7 @@
 import type { Equipment } from "@/server/mock/equipment";
 import { throwApiError } from "./error";
+import { BASE_URL } from "./config";
 
-const BASE_URL = "http://localhost:3000";
 
 export interface EquipmentListItem extends Equipment {
   free: number;
