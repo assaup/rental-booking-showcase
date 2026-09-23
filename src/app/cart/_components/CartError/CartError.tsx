@@ -2,7 +2,11 @@
 
 import { useCart } from "@/shared/cart/CartProvider";
 import type { BookingError } from "@/shared/api/booking";
-import { StateCard, StateButton, StateLink } from "../StateCard/StateCard";
+import {
+  StateCard,
+  StateButton,
+  StateLink,
+} from "../../../_components/StateCard/StateCard";
 import styles from "./CartError.module.scss";
 
 interface Props {

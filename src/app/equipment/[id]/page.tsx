@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getEquipmentById } from "@/shared/api/equipment";
-import { AddToCartButton } from "@/app/_components/AddToCartButton/AddToCartButton";
+import { AddToCartButton } from "@/app/equipment/[id]/_components/AddToCartButton/AddToCartButton";
 import { SafeBlock } from "@/app/_components/SafeBlock";
 import { Recommendations } from "@/app/_components/Recommendations/Recommendations";
 import styles from "./page.module.scss";
