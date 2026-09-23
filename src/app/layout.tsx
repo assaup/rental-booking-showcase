@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { CartProvider } from "./shared/cart/CartProvider";
 import "./globals.scss";
 import { AuthProvider } from "./shared/auth/AuthProvider";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <AuthProvider>
           <CartProvider>
-            <Header />
+            <Suspense fallback={<div style={{ height: 60 }} />}>
+              <Header />
+            </Suspense>
             {children}
           </CartProvider>
         </AuthProvider>
