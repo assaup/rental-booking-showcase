@@ -15,7 +15,11 @@ export interface Equipment {
 }
 
 const img = (n: number) => [`/placeholder/${n}-1.jpg`, `/placeholder/${n}-2.jpg`];
-
+function daysFromToday(n: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() + n);
+  return date.toISOString().slice(0, 10);
+}
 export const equipment: Equipment[] = [
   {
     id: "tent-nova-2",
@@ -38,7 +42,7 @@ export const equipment: Equipment[] = [
     specs: { Мест: "4", Вес: "3.8 кг", Сезонность: "3" },
     rules: ["Возврат в сухом виде"],
     stock: 2,
-    bookedDates: ["2026-09-20", "2026-09-21"],
+    bookedDates: [daysFromToday(3), daysFromToday(4)],
   },
   {
     id: "tent-alpine-3",
@@ -149,7 +153,7 @@ export const equipment: Equipment[] = [
     specs: { Комфорт: "-15°C", Вес: "1.2 кг", Наполнитель: "пух" },
     rules: ["Не хранить сжатым", "Беречь от влаги"],
     stock: 2,
-    bookedDates: ["2026-09-25"],
+    bookedDates: [daysFromToday(8)],
   },
   {
     id: "stove-gas-mini",

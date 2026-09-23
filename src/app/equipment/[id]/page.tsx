@@ -8,23 +8,40 @@ import styles from "./page.module.scss";
 import { RecommendationsSkeleton } from "@/app/_components/Recommendations/Recommendations";
 import { RecommendationsError } from "@/app/_components/Recommendations/RecommendationError";
 import { categoryLabel } from "@/app/shared/labels";
+import { PeriodPicker } from "@/app/_components/PeriodPicker/PeriodPicker";
 
 export default async function EquipmentPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string; to?: string }>;
 }) {
   const { id } = await params;
-    const item = await getEquipmentById(id);
+  const { from, to } = await searchParams;
+  const item = await getEquipmentById(id, from, to);
 
-    if (!item) notFound();
+  if (!item) notFound();
 
-    const specEntries = Object.entries(item.specs).slice(0, 3);
+  const specEntries = Object.entries(item.specs).slice(0, 3);
+
+  const hasDates = Boolean(from && to);
+
+  const coverLabel =
+    item.free === 0
+      ? hasDates
+        ? "Занято на ваши даты"
+        : "Нет в наличии"
+      : hasDates
+        ? "Доступно на ваши даты"
+        : "Есть в наличии";
 
   return (
     <main className={styles.page}>
       <nav className={styles.breadcrumbs}>
-        <Link href="/" className={styles.crumbLink}>Каталог</Link>
+        <Link href="/" className={styles.crumbLink}>
+          Каталог
+        </Link>
         <span>›</span>
         <Link href={`/?category=${item.category}`} className={styles.crumbLink}>
           {categoryLabel(item.category)}
@@ -37,8 +54,10 @@ export default async function EquipmentPage({
         <div className={styles.gallery}>
           <div className={styles.cover}>
             <span className={styles.badge}>
-              <span className={styles.badgeDot} />
-              {item.stock > 0 ? "Доступно на ваши даты" : "Нет в наличии"}
+              <span
+                className={`${styles.badgeDot} ${item.free === 0 ? styles.badgeDotBusy : ""}`}
+              />
+              {coverLabel}
             </span>
           </div>
 
@@ -78,17 +97,11 @@ export default async function EquipmentPage({
 
               <span className={styles.stockBadge}>
                 <span className={styles.badgeDot} />
-                {item.stock > 0 ? "В наличии" : "Нет"}
+                {item.free > 0 ? "В наличии" : "Нет"}
               </span>
             </div>
-
             <div className={styles.periodBox}>
-              <div>
-                <p className={styles.periodLabel}>Период аренды</p>
-                <p className={styles.periodValue}>
-                  Выберите даты в корзине
-                </p>
-              </div>
+              <PeriodPicker/>
             </div>
 
             <AddToCartButton

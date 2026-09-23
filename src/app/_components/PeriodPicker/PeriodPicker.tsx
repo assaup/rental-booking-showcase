@@ -53,7 +53,8 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
   function updateDates(from: string | null, to: string | null) {
     dispatch({ type: "setDates", from, to });
 
-    if (pathname !== "/") return;
+    const syncUrl = pathname === "/" || pathname.startsWith("/equipment/");
+    if (!syncUrl) return;
 
     const params = new URLSearchParams(searchParams.toString());
 
@@ -65,7 +66,7 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
 
     params.delete("page");
 
-    router.push(`/?${params}`);
+    router.push(`${pathname}?${params}`);
   }
 
   const inputs = (

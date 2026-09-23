@@ -1,10 +1,10 @@
 import {
   calculateTotals,
-  type CartItem,
-  type CartTotals,
   validateDates,
 } from "@/app/shared/cart/model";
 import { getSessionUserId } from "@/server/auth";
+import { freeQty } from "@/server/availability";
+import { bookings} from "@/server/mock/bookings";
 import { equipment } from "@/server/mock/equipment";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -27,19 +27,6 @@ const BookingRequestSchema = z.object({
   }),
 });
 
-interface Booking {
-  bookingNumber: string;
-  createdAt: string;
-  from: string;
-  to: string;
-  items: CartItem[];
-  extras: string[];
-  contacts: { name: string; phone: string };
-  totals: CartTotals;
-  userId: string
-}
-
-const bookings: Booking[] = [];
 const processedKeys = new Map<string, { bookingNumber: string }>();
 
 let counter = 4820;
@@ -78,9 +65,11 @@ export async function POST(request: Request) {
     );
   }
 
+  
   const conflicts: { id: string; requested: number; available: number }[] = [];
   for (const requestedItem of parsed.data.items) {
     const found = equipment.find((item) => item.id === requestedItem.id);
+    
 
     if (!found) {
       conflicts.push({
@@ -90,11 +79,12 @@ export async function POST(request: Request) {
       });
       continue;
     }
-    if (found.stock < requestedItem.qty) {
+    const free = freeQty(found, parsed.data.from, parsed.data.to);
+    if (free < requestedItem.qty) {
       conflicts.push({
         id: requestedItem.id,
         requested: requestedItem.qty,
-        available: found.stock,
+        available: Math.max(0, free)
       });
     }
   }

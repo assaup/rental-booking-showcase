@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { equipment, type Equipment } from "@/server/mock/equipment";
+import { freeQty } from "@/server/availability";
 
 const DEFAULT_LIMIT = 12;
 
@@ -31,8 +32,15 @@ export async function GET(request: Request) {
     (item) => item.pricePerDay >= priceMin && item.pricePerDay <= priceMax,
   );
 
+  const from = searchParams.get("from");
+  const to = searchParams.get("to");
+  function isAvailable(item: Equipment): boolean {
+    if (item.stock <= 0) return false;
+    if (!from || !to) return true;
+    return freeQty(item, from, to) > 0;
+  }
   if (onlyAvailable) {
-    result = result.filter((item) => item.stock > 0);
+    result = result.filter((item) => isAvailable(item));
   }
   // 2. Сортировка
   switch (sort) {
@@ -57,9 +65,13 @@ export async function GET(request: Request) {
   }
 
   await new Promise((resolve) => setTimeout(resolve, 700));
+  const items = result.slice(start, start + limit).map((item) => ({
+    ...item,
+    free: from && to ? freeQty(item, from, to) : item.stock,
+  }));
 
   return NextResponse.json({
-    items: result,
+    items,
     total,
     page,
     limit,

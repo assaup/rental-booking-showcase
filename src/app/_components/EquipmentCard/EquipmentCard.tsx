@@ -1,27 +1,52 @@
 import Link from "next/link";
-import type { Equipment } from "@/server/mock/equipment";
 import styles from "./EquipmentCard.module.scss";
+import { type EquipmentListItem } from "@/shared/api/equipment";
+import { categoryLabel } from "@/app/shared/labels";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  tents: "Палатки",
-  sup: "SUP-борды",
-  backpacks: "Рюкзаки",
-  sleeping: "Спальники",
-  stoves: "Горелки",
-};
 
-export function EquipmentCard({ item }: { item: Equipment }) {
+interface Props {
+  item: EquipmentListItem;
+  from?: string;
+  to?: string;
+}
+
+export function EquipmentCard({ item, from, to }: Props) {
+
+  const params = new URLSearchParams()
+  if (from && to) {
+    params.set('from', from)
+    params.set('to', to)
+  }
+  const query = params.toString();
+  const href = `/equipment/${item.id}${query ? `?${query}` : ""}`
+
+
+  const label =
+    item.free === 0
+      ? "Занято на ваши даты"
+      : item.free <= 2
+        ? `Осталось ${item.free}`
+        : "Доступно";
+
+  const dotClass =
+  item.free === 0
+    ? styles.badgeDotBusy
+    : item.free <= 2
+      ? styles.badgeDotLow
+      : "";
+
   return (
     <li className={styles.card}>
-      <Link href={`/equipment/${item.id}`} className={styles.link}>
+      <Link href={href} className={styles.link}>
         <div className={styles.photo}>
           <span className={styles.badge}>
-            {item.stock > 2 ? "Доступно" : `Осталось ${item.stock}`}
+            <span className={`${styles.badgeDot} ${dotClass}`} />
+            {label}
           </span>
         </div>
 
         <div className={styles.body}>
-          <p className={styles.category}>{CATEGORY_LABELS[item.category]}</p>
+          <p className={styles.category}>{categoryLabel(item.category)}</p>
           <h3 className={styles.name}>{item.name}</h3>
 
           <p className={styles.specs}>
@@ -32,12 +57,6 @@ export function EquipmentCard({ item }: { item: Equipment }) {
           <p className={styles.deposit}>залог {item.deposit} ₽</p>
         </div>
       </Link>
-      <span className={styles.badge}>
-        <span
-          className={`${styles.badgeDot} ${item.stock <= 2 ? styles.badgeDotLow : ""}`}
-        />
-        {item.stock > 2 ? "Доступно" : `Осталось ${item.stock}`}
-      </span>
       <span className={styles.arrow}>↗</span>
     </li>
   );

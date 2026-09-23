@@ -60,7 +60,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Raw
         ) : (
           <ul className={styles.grid}>
             {items.map((item) => (
-              <EquipmentCard key={item.id} item={item} />
+              <EquipmentCard key={item.id} item={item} from={params.from} to={params.to} />
             ))}
           </ul>
         )}
