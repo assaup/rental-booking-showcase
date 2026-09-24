@@ -5,13 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/shared/auth/AuthProvider";
 import { LoginForm } from "./_components/LoginForm/LoginForm";
 import styles from "./page.module.scss";
+import { getSafeRedirect } from "@/shared/lib/login";
 
 export default function LoginPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const redirectTo = searchParams.get("from") ?? "/";
+  const redirectTo = getSafeRedirect(searchParams.get("from"));
 
   // уже вошёл — незачем показывать форму
   useEffect(() => {

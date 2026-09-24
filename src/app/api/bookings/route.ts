@@ -1,10 +1,7 @@
-import {
-  calculateTotals,
-  validateDates,
-} from "@/shared/cart/model";
+import { calculateTotals, validateDates } from "@/shared/cart/model";
 import { getSessionUserId } from "@/server/auth";
 import { freeQty } from "@/server/availability";
-import { bookings} from "@/server/mock/bookings";
+import { bookings } from "@/server/mock/bookings";
 import { equipment } from "@/server/mock/equipment";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -41,14 +38,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
   }
   const idempotencyKey = request.headers.get("Idempotency-Key");
-  if (idempotencyKey) {
-    const existing = processedKeys.get(idempotencyKey);
-    if (existing) {
-      return NextResponse.json(existing, { status: 201 });
-    }
+  if (!idempotencyKey) {
+    return NextResponse.json(
+      { message: "Заголовок обязательный" },
+      { status: 400 },
+    );
+  }
+  const key = `${userId}:${idempotencyKey}`;
+  const existing = processedKeys.get(key);
+  if (existing) {
+    return NextResponse.json(existing, { status: 201 });
   }
 
-  const body = await request.json();
+  let body: unknown
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ message: "Некорректные JSON" }, { status: 400 });
+  }
   const parsed = BookingRequestSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -65,11 +72,9 @@ export async function POST(request: Request) {
     );
   }
 
-  
   const conflicts: { id: string; requested: number; available: number }[] = [];
   for (const requestedItem of parsed.data.items) {
     const found = equipment.find((item) => item.id === requestedItem.id);
-    
 
     if (!found) {
       conflicts.push({
@@ -84,7 +89,7 @@ export async function POST(request: Request) {
       conflicts.push({
         id: requestedItem.id,
         requested: requestedItem.qty,
-        available: Math.max(0, free)
+        available: Math.max(0, free),
       });
     }
   }
@@ -129,12 +134,11 @@ export async function POST(request: Request) {
     extras: parsed.data.extras,
     contacts: parsed.data.contacts,
     totals,
-    userId
+    userId,
   });
 
-  if (idempotencyKey) {
-    processedKeys.set(idempotencyKey, result);
-  }
+  processedKeys.set(key, result);
+
   return NextResponse.json(result, { status: 201 });
 }
 

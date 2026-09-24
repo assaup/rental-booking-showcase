@@ -131,7 +131,7 @@ export default async function EquipmentPage({
       <div className={styles.recommendations}>
         <SafeBlock
           loading={<RecommendationsSkeleton />}
-          fallback={<RecommendationsError />}
+          FallbackComponent={RecommendationsError}
         >
           <Recommendations excludeId={item.id} />
         </SafeBlock>

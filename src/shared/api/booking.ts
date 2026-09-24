@@ -34,13 +34,13 @@ export interface Booking {
 export async function createBooking(
   payload: BookingPayload,
   idempotencyKey: string,
-  simulateFailule: boolean = false,
+  simulateFailure: boolean = false,
 ): Promise<{ bookingNumber: string }> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    IdempotencyKey: idempotencyKey,
+    "Idempotency-Key": idempotencyKey,
   };
-  if (simulateFailule) {
+  if (simulateFailure) {
     headers["X-Simulate-Payment-Failure"] = "1";
   }
 

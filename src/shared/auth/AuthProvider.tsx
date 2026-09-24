@@ -7,7 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { fetchMe, login as loginRequest, logout as logoutRequest } from "@/shared/api/auth";
+import {
+  fetchMe,
+  login as loginRequest,
+  logout as logoutRequest,
+} from "@/shared/api/auth";
 import type { User } from "@/shared/api/auth";
 
 interface AuthContextValue {
@@ -26,35 +30,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function load() {
-      try{
-        const data = await fetchMe()
-        setUser(data)
+      try {
+        const data = await fetchMe();
+        setUser(data);
       } catch {
-        setUser(null)
+        setUser(null);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    load()
+    load();
   }, []);
 
   async function login(email: string, password: string) {
-    const data = await loginRequest(email, password)
-    console.log("login result:", data);
-    setUser(data)
-
+    const data = await loginRequest(email, password);
+    setUser(data);
   }
 
   async function logout() {
-    await logoutRequest()
-    setUser(null)
+    await logoutRequest();
+    setUser(null);
   }
-  function clearSession(){
-    setUser(null)
+  function clearSession() {
+    setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, clearSession }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, logout, clearSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

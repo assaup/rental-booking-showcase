@@ -59,13 +59,13 @@ export async function GET(request: Request) {
   const total = result.length;
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const start = (page - 1) * limit;
-  result = result.slice(start, start + limit);
   if (searchParams.get("fail") === "1") {
     return NextResponse.json({ message: "Временный сбой" }, { status: 503 });
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  const items = result.slice(start, start + limit).map((item) => ({
+  result = result.slice(start, start + limit);
+  const items = result.map((item) => ({
     ...item,
     free: from && to ? freeQty(item, from, to) : item.stock,
   }));

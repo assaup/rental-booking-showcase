@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { StateCard, StateButton } from "../StateCard/StateCard";
+import { startTransition } from "react";
+import { FallbackProps } from "react-error-boundary";
 
-export function RecommendationsError() {
+export function RecommendationsError({ resetErrorBoundary }: FallbackProps) {
   const router = useRouter();
 
   return (
@@ -14,7 +16,7 @@ export function RecommendationsError() {
       title="Дополнительный блок не загрузился"
       text="Основное содержимое и бронирование работают без ограничений."
       actions={
-        <StateButton variant="ghost" onClick={() => router.refresh()}>
+        <StateButton variant="ghost" onClick={() => startTransition(() => {router.refresh(); resetErrorBoundary()}) }>
           Повторить только рекомендации →
         </StateButton>
       }
