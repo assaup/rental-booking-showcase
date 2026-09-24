@@ -52,6 +52,7 @@ export function CartItems({ error }: Props) {
             <button
               type="button"
               className={styles.counterBtn}
+              max={item.free}
               onClick={() =>
                 dispatch({
                   type: "setQty",

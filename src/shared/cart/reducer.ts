@@ -55,6 +55,7 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         ...state,
         items: [],
+        extras: []
       };
     case 'toggleExtra': {
       const selected = state.extras.includes(action.id)

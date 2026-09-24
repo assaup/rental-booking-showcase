@@ -13,7 +13,7 @@
   font-weight: 600;
   transition: background 0.15s ease, transform 0.08s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #2e5643;
   }
 

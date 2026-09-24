@@ -110,6 +110,7 @@ export default async function EquipmentPage({
               pricePerDay={item.pricePerDay}
               deposit={item.deposit}
               category={item.category}
+              item={item}
             />
           </section>
 
