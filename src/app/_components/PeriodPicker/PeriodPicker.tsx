@@ -68,7 +68,8 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
 
     router.push(`${pathname}?${params}`);
   }
-
+  const valueFrom = mounted ? state.from : null;
+  const valueTo = mounted ? state.to : null;
   const inputs = (
     <div className={styles.inputs}>
       <input
@@ -76,8 +77,8 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
         className={styles.input}
         aria-label="Дата выдачи"
         min={today}
-        max={state.to ?? undefined}
-        value={state.from ?? ""}
+        max={valueTo ?? undefined}
+        value={valueFrom ?? ""}
         onChange={(e) => updateDates(e.target.value || null, state.to)}
       />
       <span className={styles.dash}>—</span>
@@ -85,8 +86,8 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
         type="date"
         className={styles.input}
         aria-label="Дата возврата"
-        min={state.from ?? today}
-        value={state.to ?? ""}
+        min={valueFrom ?? today}
+        value={valueTo ?? ""}
         onChange={(e) => updateDates(state.from, e.target.value || null)}
       />
     </div>
@@ -161,7 +162,9 @@ export function PeriodPicker({ variant = "panel", hint }: Props) {
 
       {inputs}
 
-      {dateError && <p className={styles.error}>{dateError.message}</p>}
+      {mounted && dateError && (
+        <p className={styles.error}>{dateError.message}</p>
+      )}
     </section>
   );
 }
