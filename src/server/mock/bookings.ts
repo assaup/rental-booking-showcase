@@ -1,15 +1,7 @@
-import type { CartItem, CartTotals } from "@/shared/cart/model";
+import { type Booking } from "@/shared/api/booking";
 
-export interface Booking {
-  bookingNumber: string;
-  createdAt: string;
-  from: string;
-  to: string;
-  items: CartItem[];
-  extras: string[];
-  contacts: { name: string; phone: string };
-  totals: CartTotals;
+export interface BookingRecord extends Booking {
   userId: string;
 }
 
-export const bookings: Booking[] = [];
+export const bookings: BookingRecord[] = [];

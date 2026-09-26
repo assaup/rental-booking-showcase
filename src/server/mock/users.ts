@@ -1,11 +1,10 @@
-export interface User {
-  id: string;
-  email: string;
-  password: string; //учебный проект
-  name: string;
+import { type User } from "@/shared/api/auth";
+
+interface UserRecord extends User {
+  password: string;
 }
 
-export const users: User[] = [
+export const users: UserRecord[] = [
   {
     id: "u1",
     email: "samir@mail.ru",

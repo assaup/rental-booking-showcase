@@ -5,15 +5,11 @@ import { ApiError } from "@/shared/api/error";
 import { useState, type SyntheticEvent } from "react";
 import { z } from "zod";
 import styles from "./LoginForm.module.scss";
+import { LoginDataSchema } from "@/shared/api/auth";
 
-const LoginDataSchema = z.object({
-  email: z.string().email("Введите корректный email"),
-  password: z.string().min(1, "Введите пароль"),
-});
 interface Props {
   onSuccess: () => void;
 }
-
 export function LoginForm({ onSuccess }: Props) {
   const [form, setForm] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState<Record<string, boolean>>({});

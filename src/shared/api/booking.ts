@@ -1,6 +1,6 @@
 import { BASE_URL } from "./config";
 import { throwApiError } from "./error";
-import { CartItem, CartTotals } from "@/shared/cart/model";
+import { type CartItem, type CartTotals } from "@/shared/cart/model";
 
 export interface BookingPayload {
   from: string;
@@ -30,6 +30,7 @@ export interface Booking {
   contacts: { name: string; phone: string };
   totals: CartTotals;
 }
+export const bookings: Booking[] = [];
 
 export async function createBooking(
   payload: BookingPayload,

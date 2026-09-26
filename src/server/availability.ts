@@ -1,4 +1,4 @@
-import { bookings } from "./mock/bookings";
+import { bookings } from "@/shared/api/booking";
 import type { Equipment } from "./mock/equipment";
 
 export function isBookedInRange(

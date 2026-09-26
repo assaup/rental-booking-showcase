@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from "react";
 import { type Contacts, validateDates } from "@/shared/cart/model";
 import { useCart } from "@/shared/cart/CartProvider";

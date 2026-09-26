@@ -1,4 +1,8 @@
-import { calculateTotals, validateDates } from "@/shared/cart/model";
+import {
+  calculateTotals,
+  validateDates,
+  ContactsSchema,
+} from "@/shared/cart/model";
 import { getSessionUserId } from "@/server/auth";
 import { freeQty } from "@/server/availability";
 import { bookings } from "@/server/mock/bookings";
@@ -18,10 +22,7 @@ const BookingRequestSchema = z.object({
     )
     .min(1),
   extras: z.array(z.string()).default([]),
-  contacts: z.object({
-    name: z.string().min(2),
-    phone: z.string().min(10),
-  }),
+  contacts: ContactsSchema,
 });
 
 const processedKeys = new Map<string, { bookingNumber: string }>();
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   if (!userId) {
     return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
   }
+
   const idempotencyKey = request.headers.get("Idempotency-Key");
   if (!idempotencyKey) {
     return NextResponse.json(
@@ -44,26 +46,28 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
+
   const key = `${userId}:${idempotencyKey}`;
   const existing = processedKeys.get(key);
   if (existing) {
     return NextResponse.json(existing, { status: 201 });
   }
 
-  let body: unknown
+  let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ message: "Некорректные JSON" }, { status: 400 });
+    return NextResponse.json({ message: "Некорректный JSON" }, { status: 400 });
   }
-  const parsed = BookingRequestSchema.safeParse(body);
 
+  const parsed = BookingRequestSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { message: "Некорректные данные", issues: parsed.error.issues },
       { status: 400 },
     );
   }
+
   const dateError = validateDates(parsed.data.from, parsed.data.to);
   if (dateError) {
     return NextResponse.json(
@@ -84,6 +88,7 @@ export async function POST(request: Request) {
       });
       continue;
     }
+
     const free = freeQty(found, parsed.data.from, parsed.data.to);
     if (free < requestedItem.qty) {
       conflicts.push({
@@ -93,12 +98,14 @@ export async function POST(request: Request) {
       });
     }
   }
+
   if (conflicts.length > 0) {
     return NextResponse.json(
       { message: "Некоторые позиции недоступны на выбранные даты", conflicts },
       { status: 409 },
     );
   }
+
   if (request.headers.get("X-Simulate-Payment-Failure") === "1") {
     return NextResponse.json(
       { message: "Платёж не прошёл. Попробуйте ещё раз." },
@@ -117,12 +124,14 @@ export async function POST(request: Request) {
       qty: requested.qty,
     };
   });
+
   const totals = calculateTotals({
     items: cartItems,
     from: parsed.data.from,
     to: parsed.data.to,
     extras: parsed.data.extras,
   });
+
   const result = { bookingNumber: generateBookingNumber() };
 
   bookings.push({
@@ -144,12 +153,13 @@ export async function POST(request: Request) {
 
 export async function GET() {
   const userId = await getSessionUserId();
-
   if (!userId) {
     return NextResponse.json({ message: "Не авторизован" }, { status: 401 });
   }
 
-  return NextResponse.json({
-    bookings: bookings.filter((b) => b.userId === userId),
-  });
+  const userBookings = bookings
+    .filter((b) => b.userId === userId)
+    .map(({ userId: _userId, ...booking }) => booking);
+
+  return NextResponse.json({ bookings: userBookings });
 }

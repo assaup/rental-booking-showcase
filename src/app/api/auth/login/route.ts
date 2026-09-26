@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { z } from "zod";
 import { users, sessions } from "@/server/mock/users";
-
-const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
+import { LoginDataSchema } from "@/shared/api/auth";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const parsed = LoginSchema.safeParse(body);
+  const parsed = LoginDataSchema.safeParse(body);
 
   if (!parsed.success) {
     return NextResponse.json(
@@ -39,6 +34,5 @@ export async function POST(request: Request) {
     path: "/",
   });
 
-  return Response.json({ user: safeUser })
-
+  return Response.json({ user: safeUser });
 }

@@ -10,6 +10,7 @@ export const CartItemSchema = z.object({
   category: CategorySchema,
 });
 
+
 export const CartStateSchema = z.object({
   items: z.array(CartItemSchema),
   from: z.string().nullable(),

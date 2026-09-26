@@ -1,3 +1,4 @@
+import z from "zod";
 import { BASE_URL } from "./config";
 import { ApiError } from "./error";
 
@@ -6,6 +7,11 @@ export interface User {
   email: string;
   name: string;
 }
+
+export const LoginDataSchema = z.object({
+  email: z.string().email("Введите корректный email"),
+  password: z.string().min(1, "Введите пароль"),
+});
 
 export async function login(email: string, password: string): Promise<User> {
   const res = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -35,7 +41,7 @@ export async function logout(): Promise<void> {
   if (!res.ok) {
     throw new ApiError(res.status, "Не удалось выйти");
   }
-  const data = await res.json()
+  const data = await res.json();
   return data;
 }
 
